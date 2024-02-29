@@ -1,17 +1,14 @@
 <?php
 // Helpers to manage the JSON store.
 
-$BASE = __DIR__ . "../data/";
+// NOTE(robin): we're using a year-based system again,
+// where each year is a seperate JSON file. However, this
+// time filters will work for all years, not just the current
+// year. Also, I want the site to work a bit like a
+// time machine. Each year has its own CSS and templating,
+// and a bar on the top allows you to switch between years.
 
-function path_from_datetime($ext) {
-  global $BASE;
-  return $BASE . date("Y-m-dTH:i:s") . $ext;
-}
-
-function path_from_hash($filename, $ext) {
-  global $BASE;
-  return $BASE . hash_file("md5", $filename) . $ext;
-}
+namespace core;
 
 function new_post($content) {
   $path = path_from_datetime(".md");
@@ -30,21 +27,10 @@ function upload_photo($tmp_file) {
   }
 }
 
-function ext($path) {
-  return "." . strtolower(pathinfo($path, PATHINFO_EXTENSION));
-}
-
-// NOTE(robin): we're using a year-based system again,
-// where each year is a seperate JSON file. However, this
-// time filters will work for all years, not just the current
-// year. Also, I want the site to work a bit like a
-// time machine. Each year has its own CSS and templating,
-// and a bar on the top allows you to switch between years.
-
 function publish_post($post) {
   global $BASE;
 
-  $feed = $BASE . year($post["published"]) . ".json";
+  $feed = $BASE . \dates\year($post["published"]) . ".json";
   write_post($feed, $post);
 }
 
@@ -54,4 +40,13 @@ function write_post($feed, $post)  {
 
   array_unshift($posts, $post);
   file_put_contents($feed, json_encode($posts));
+}
+
+function send_webmentions($post) {
+  $source_url = post_url($post);
+  $targets = []; // TODO(robin): get all URLs from post.
+
+  foreach($targets as $target_url) {
+    \webmentions\send_webmentions($source_url, $target_url);
+  }
 }

@@ -1,5 +1,7 @@
 <?php
-// Functions for generating URLs
+// Functions for generating URLs.
+
+namespace core;
 
 function photo_url($path) {
   global $CANONICAL;
@@ -9,12 +11,6 @@ function photo_url($path) {
 function post_url($post) {
   global $CANONICAL;
 
-  $year_published = year($post["published"]);
+  $year_published = \dates\year($post["published"]);
   return $CANONICAL . "/" . $year_published . "/" . $post["id"];
-}
-
-function normalize_url($url) {
-  if (substr($url, -1) != "/") {
-      return $url .= "/";
-  }
 }

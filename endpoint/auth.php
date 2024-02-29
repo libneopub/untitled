@@ -22,11 +22,7 @@ if (!isset($_POST["h"])) {
 }
 
 $options = array(
-    CURLOPT_URL => $TOKEN_ENDPOINT,
     CURLOPT_HTTPGET => true,
-    CURLOPT_USERAGENT => $CANONICAL,
-    CURLOPT_TIMEOUT => 5,
-    CURLOPT_RETURNTRANSFER => true,
     CURLOPT_HEADER => false,
     CURLOPT_HTTPHEADER => array(
         "Content-type: application/x-www-form-urlencoded",
@@ -34,12 +30,8 @@ $options = array(
     )
 );
 
-$curl = curl_init();
-curl_setopt_array($curl, $options);
-$source = curl_exec($curl);
-curl_close($curl);
-
-parse_str($source, $values);
+$response = \http\request($TOKEN_ENDPOINT, $options);
+parse_str($response["body"], $values);
 
 if (!isset($values["me"])) {
     header($_SERVER["SERVER_PROTOCOL"] . " 400 Bad Request");

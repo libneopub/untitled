@@ -65,7 +65,7 @@ if(isset($_FILES["photo"])) {
         exit;
     }
 
-    $path = upload_photo($tmp_file);
+    $path = \core\upload_photo($tmp_file);
 
     if(!$path) {
         header($_SERVER["SERVER_PROTOCOL"] . " 500 Internal Server Error");
@@ -108,7 +108,7 @@ if(isset($_FILES["photo"])) {
         exit;
     }
 
-    $path = new_post($content);
+    $path = \core\new_post($content);
 
     $post = array(
         "id" => uniqid(),
@@ -120,8 +120,8 @@ if(isset($_FILES["photo"])) {
     );
 }
 
-publish_post($post);
-send_webmentions($post);
+\core\publish_post($post);
+\core\send_webmentions($post);
 
 header($_SERVER["SERVER_PROTOCOL"] . " 201 Created");
-header("Location: " . post_url($post));
+header("Location: " . \core\post_url($post));

@@ -1,10 +1,11 @@
 <?php
 // Core neopub APIs live here.
 
-require_once __DIR__ . "/core/posts.php";
+require_once __DIR__ . "/core/utils.php";
+require_once __DIR__ . "/core/http.php";
 require_once __DIR__ . "/core/dates.php";
 require_once __DIR__ . "/core/urls.php";
-require_once __DIR__ . "/core/errors.php";
+require_once __DIR__ . "/core/posts.php";
 
 // Method to debug the micropub endpoint. It crashes the 
 // endpoint and logs the request to log.json

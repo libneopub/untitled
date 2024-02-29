@@ -2,6 +2,9 @@
 // Media endpoint for uploading static files.
 // Currently only photos are supported.
 
+require_once __DIR__ . "/../config.php";
+require_once __DIR__ . "/../core.php";
+
 include __DIR__ . "/auth.php";
 
 if(empty($_FILES)) {
@@ -26,7 +29,7 @@ if(!is_uploaded_file($tmp_file) || !getimagesize($tmp_file)) {
     exit;
 }
 
-$path = upload_photo($tmp_file);
+$path = \core\upload_photo($tmp_file);
 
 if(!$path) {
     header($_SERVER["SERVER_PROTOCOL"] . " 500 Internal Server Error");
@@ -35,4 +38,4 @@ if(!$path) {
 }
 
 header($_SERVER["SERVER_PROTOCOL"] . " 201 Created");
-header("Location: " . photo_url($path));
+header("Location: " . \core\photo_url($path));
