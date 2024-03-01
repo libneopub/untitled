@@ -3,29 +3,27 @@
 
 namespace webmentions;
 
-function send_webmentions($source_url, $target_url) {
+function send_webmention($source_url, $target_url) {
   $endpoint = discover_endpoint($target_url);
-    
-  if($endpoint) {
-    $options = array(
-      CURLOPT_POST => true,
-      CURLOPT_POSTFIELDS => array(
-        "source" => $source_url,
-        "target" => $target_url
-      ),
-      CURLOPT_HTTPHEADER => array(
-          "Content-type: application/x-www-form-urlencoded",
-          "Accept: application/json, */*;q=0.8"
-      )
-    );
 
-    return \http\request($endpoint, $options);
-  }
+  if (!$endpoint) return false;
+    
+  $options = array(
+    CURLOPT_POST => true,
+    CURLOPT_POSTFIELDS => array(
+      "source" => $source_url,
+      "target" => $target_url
+    ),
+    CURLOPT_HTTPHEADER => array(
+        "Content-type: application/x-www-form-urlencoded",
+        "Accept: application/json, */*;q=0.8"
+    )
+  );
+
+  return \http\request($endpoint, $options);
 }
 
 function discover_endpoint($target_url) {
-  global $CANONICAL;
-
   $response = \http\request($target_url, array(CURLOPT_HTTPGET => true));
   $body = strip_comments($response["body"]);
   $links = parse_link_header($response['headers']['link']);
@@ -44,10 +42,6 @@ function discover_endpoint($target_url) {
   }
 
   return false;
-}
-
-function strip_comments($body) {
-  return preg_replace('/<!--(.*)-->/Us', '', $body);
 }
 
 // Adapted version of phpish/link_header, licensed MIT.

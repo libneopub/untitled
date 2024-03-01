@@ -26,3 +26,7 @@ function normalize_url($url) {
       return $url .= "/";
   }
 }
+
+function strip_comments($body) {
+  return preg_replace('/<!--(.*)-->/Us', '', $body);
+}

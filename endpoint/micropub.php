@@ -1,7 +1,7 @@
 <?php
 // Micropub endpoint for creating new posts.
 
-// TODO(robin): I *should* refactor the error return stuff to
+// NOTE(robin): I *should* refactor the error return stuff to
 // adhere to the spec (aka return an JSON object with "error" key),
 // but that means letting go of my beloved "418 I'm a teapot", which
 // I am, quite frankly, not willing to do. So fuck the spec.
@@ -10,7 +10,7 @@ require_once __DIR__ . "/../config.php";
 require_once __DIR__ . "/../core.php";
 
 // Configuration requests don't need authentication
-if($_GET["q"] === "config") {
+if ($_GET["q"] === "config") {
     header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
     echo json_encode(array("media-endpoint" => $MEDIA_ENDPOINT));
     exit;
@@ -27,19 +27,19 @@ if (isset($_POST["action"])) {
     exit;
 }
 
-if(isset($_POST["repost-of"]) || isset($_POST["like-of"]) || isset($_POST["bookmark-of"])) {
+if (isset($_POST["repost-of"]) || isset($_POST["like-of"]) || isset($_POST["bookmark-of"])) {
     header($_SERVER["SERVER_PROTOCOL"] . " 418 I'm a teapot");
     echo "Reposts, likes, or bookmarks are unsupported, use a reply instead.";
     exit;
 }
 
-if(!empty($_FILES) && !isset($_FILES["photo"])) {
+if (!empty($_FILES) && !isset($_FILES["photo"])) {
     header($_SERVER["SERVER_PROTOCOL"] . " 418 I'm a teapot");
     echo "Only 'photo' uploads are supported.";
     exit;
 }
 
-if(isset($_POST["name"])) {
+if (isset($_POST["name"])) {
     echo "Warning: this endpoint does not support posting full posts, title will be ignored.";
 }
 
@@ -50,8 +50,8 @@ $published = $_POST['published'] ?? date("Y-m-dTH:i:s");
 $updated = $_POST['updated'] ?? date("Y-m-dTH:i:s");
 $reply_to = $_POST['in-reply-to'];
 
-if(isset($_FILES["photo"])) {
-    if(isset($_POST["photo"])) {
+if (isset($_FILES["photo"])) {
+    if (isset($_POST["photo"])) {
         echo "Warning: you provided both a photo upload and URL. The URL will be ignored.";
     }
 
@@ -59,7 +59,7 @@ if(isset($_FILES["photo"])) {
 
     // This checks if someone isn't maliciously trying
     // to overwrite /etc/passwd or something.
-    if(!is_uploaded_file($tmp_file) || !getimagesize($tmp_file)) {
+    if (!is_uploaded_file($tmp_file) || !getimagesize($tmp_file)) {
         header($_SERVER["SERVER_PROTOCOL"] . " 400 Bad Request");
         echo "Bad photo upload. Try again.";
         exit;
@@ -67,7 +67,7 @@ if(isset($_FILES["photo"])) {
 
     $path = \core\upload_photo($tmp_file);
 
-    if(!$path) {
+    if (!$path) {
         header($_SERVER["SERVER_PROTOCOL"] . " 500 Internal Server Error");
         echo "Something went wrong while saving your photo.";
         exit;
@@ -82,8 +82,8 @@ if(isset($_FILES["photo"])) {
         "published" => $published,
         "updated" => $updated
     );
-} else if(isset($_POST["photo"])) {
-    if(is_array($_POST["photo"])) {
+} else if (isset($_POST["photo"])) {
+    if (is_array($_POST["photo"])) {
         echo "Warning: this endpoint only supports a single photo per post, other photos will be ignored.";
 
         $url = $_POST["photo"][0];
@@ -102,7 +102,7 @@ if(isset($_FILES["photo"])) {
     );
 
 } else {
-    if(!$content) {
+    if (!$content) {
         header($_SERVER["SERVER_PROTOCOL"] . " 400 Bad Request");
         echo "Missing 'content' or 'summary' value in post payload.";
         exit;
