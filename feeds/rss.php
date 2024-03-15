@@ -4,7 +4,7 @@
 require_once __DIR__ . "/../config.php";
 require_once __DIR__ . "/../core.php";
 
-// TODO(robin): use proper caching like Last-Modified or ETags.
+include __DIR__ . "/caching.php";
 
 header("Content-Type: application/atom+rss; charset=UTF-8");
 echo '<?xml version="1.0" encoding="utf-8" standalone="yes"?>';

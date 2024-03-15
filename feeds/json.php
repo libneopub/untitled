@@ -5,6 +5,8 @@
 require_once __DIR__ . "/../config.php";
 require_once __DIR__ . "/../core.php";
 
+include __DIR__ . "/caching.php";
+
 header("Content-Type: application/feed+json; charset=UTF-8");
 
 $posts = \store\list_posts(date("Y"));

@@ -43,8 +43,12 @@ if (!empty($_FILES) && !isset($_FILES["photo"])) {
 
 $title = $_POST["name"];
 $content = $_POST['content'] ?? $_POST['summary'];
-$published = $_POST['published'] ?? date("Y-m-dTH:i:s");
 $reply_to = $_POST['in-reply-to'];
+
+// If `published` is given, use that, otherwise,
+// fall back to the current datetime.
+$published = $_POST['published'] ?? date("Y");
+$published = date("c", strtotime($published));
 
 if (isset($_FILES["photo"])) {
     if (isset($_POST["photo"])) {

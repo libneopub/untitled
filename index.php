@@ -72,6 +72,7 @@ else {
         // Render a single post.
         if(isset($post)) {
           \renderer\render_post($post);
+          // TODO(robin): render comment section.
         } 
         
         // Render listing.
