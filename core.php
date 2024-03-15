@@ -1,6 +1,9 @@
 <?php
 // Core neopub APIs live here.
 
+$PUBB_VERSION = "0.1a";
+$BASE = __DIR__ . "../data/";
+
 require_once __DIR__ . "/core/utils.php";
 require_once __DIR__ . "/core/http.php";
 require_once __DIR__ . "/core/dates.php";

@@ -29,7 +29,7 @@ if(!is_uploaded_file($tmp_file) || !getimagesize($tmp_file)) {
     exit;
 }
 
-$path = \core\upload_photo($tmp_file);
+$path = \store\upload_photo($tmp_file);
 
 if(!$path) {
     header($_SERVER["SERVER_PROTOCOL"] . " 500 Internal Server Error");
@@ -38,4 +38,4 @@ if(!$path) {
 }
 
 header($_SERVER["SERVER_PROTOCOL"] . " 201 Created");
-header("Location: " . \core\photo_url($path));
+header("Location: " . \urls\photo_url($path));

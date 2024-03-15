@@ -1,11 +1,11 @@
 <?php
 // Functions for generating URLs.
 
-namespace core;
+namespace urls;
 
 function photo_url($path) {
   global $CANONICAL;
-  return $CANONICAL . "/photos/" . basename($path);
+  return $CANONICAL . "/raw/" . basename($path);
 }
 
 function post_url($post) {

@@ -39,15 +39,11 @@ if (!empty($_FILES) && !isset($_FILES["photo"])) {
     exit;
 }
 
-if (isset($_POST["name"])) {
-    echo "Warning: this endpoint does not support posting full posts, title will be ignored.";
-}
-
 // Okey, request lookin' good, let's process it :D
 
+$title = $_POST["name"];
 $content = $_POST['content'] ?? $_POST['summary'];
 $published = $_POST['published'] ?? date("Y-m-dTH:i:s");
-$updated = $_POST['updated'] ?? date("Y-m-dTH:i:s");
 $reply_to = $_POST['in-reply-to'];
 
 if (isset($_FILES["photo"])) {
@@ -65,7 +61,7 @@ if (isset($_FILES["photo"])) {
         exit;
     }
 
-    $path = \core\upload_photo($tmp_file);
+    $path = \store\upload_photo($tmp_file);
 
     if (!$path) {
         header($_SERVER["SERVER_PROTOCOL"] . " 500 Internal Server Error");
@@ -79,9 +75,9 @@ if (isset($_FILES["photo"])) {
         "path" => $path,
         "caption" => $content,
         "reply-to" => $reply_to,
-        "published" => $published,
-        "updated" => $updated
+        "published" => $published
     );
+
 } else if (isset($_POST["photo"])) {
     if (is_array($_POST["photo"])) {
         echo "Warning: this endpoint only supports a single photo per post, other photos will be ignored.";
@@ -97,8 +93,7 @@ if (isset($_FILES["photo"])) {
         "url" => $url,
         "caption" => $content,
         "reply-to" => $reply_to,
-        "published" => $published,
-        "updated" => $updated
+        "published" => $published
     );
 
 } else {
@@ -108,15 +103,16 @@ if (isset($_FILES["photo"])) {
         exit;
     }
 
-    $path = \core\new_post($content);
+    $path = \store\upload_text($content);
+    $type = $title ? "article" : "toot";
 
     $post = array(
         "id" => uniqid(),
-        "type" => "note",
+        "type" => $type,
+        "title" => $title,
         "path" => $path,
         "reply-to" => $reply_to,
-        "published" => $published,
-        "updated" => $updated
+        "published" => $published
     );
 }
 
@@ -124,4 +120,4 @@ if (isset($_FILES["photo"])) {
 \core\send_webmentions($post);
 
 header($_SERVER["SERVER_PROTOCOL"] . " 201 Created");
-header("Location: " . \core\post_url($post));
+header("Location: " . \urls\post_url($post));
