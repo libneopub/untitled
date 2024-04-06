@@ -1,0 +1,71 @@
+AddDefaultCharset UTF-8
+
+# Limit file uploads to 100K
+LimitRequestBody 102400
+
+# Preserve bandwidth for PHP enabled servers
+<ifmodule mod_php4.c>
+	php_value zlib.output_compression 16386
+</ifmodule>
+
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteBase /
+
+	# Fuck the www prefix!
+	RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+	RewriteRule ^ %{REQUEST_SCHEME}://%1%{REQUEST_URI} [R=307,L]
+
+	# Force https (disabled, see 1mb.club)
+	#RewriteCond %{HTTPS} off 
+	#RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+	# Block access to all hidden files and directories except for the
+	# visible content from within the `/.well-known/` hidden directory.
+	RewriteCond %{REQUEST_URI} "!(^|/)\.well-known/([^./]+./?)+$" [NC]
+	RewriteCond %{SCRIPT_FILENAME} -d [OR]
+	RewriteCond %{SCRIPT_FILENAME} -f
+	RewriteRule "(^|/)\." - [F]
+
+	# Routing (yea I know, it sucks)
+	RewriteRule ^([0-9]{4})$ index.php?year=$1 [QSA,L] 										# Route: /:year
+	RewriteRule ^([0-9]{4})/([^/]+)$ index.php?year=$1&type=$2 [QSA,L]		# Route: /:year/:type
+	RewriteRule ^([0-9]{4})/([0-9]+)$ index.php?year=$1&id=$2 [QSA,L]		  # Route: /:year/:id
+</IfModule>
+
+# Preserve bandwidth for PHP enabled servers
+<IfModule mod_php4.c>
+	php_value zlib.output_compression 16386
+</IfModule>
+
+# Follow symbolic links
+Options +FollowSymLinks
+
+# GZip compression
+<IfModule mod_deflate.c>
+	SetOutputFilter DEFLATE
+</IfModule>
+
+# Caching
+<IfModule mod_headers.c>
+	# Cache static assets and images ~forever (max value for max age)
+	<FilesMatch "\.(jpg|jpeg|png|webp|gif|svg|woff|woff2)$">
+		Header set Cache-Control "max-age=31536000, immutable"
+	</FilesMatch>
+
+	# Cache SS and JavaScript files for one week
+	<FilesMatch "\.(js|css)$">
+		Header set Cache-Control "max-age=604800, stale-while-revalidate"
+	</FilesMatch>
+
+	# Cache content for a day
+	<FilesMatch "\.(html|pdf|txt)$">
+		Header set Cache-Control "max-age=43200"
+	</FilesMatch>
+
+	# Explicitly disable caching for scripts and other dynamic files
+	<FilesMatch "\.(pl|cgi|spl|scgi|fcgi|php)$">
+		Header set Cache-Control "no-cache"
+		Header unset Expires
+	</FilesMatch>
+</IfModule>
