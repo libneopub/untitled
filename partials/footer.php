@@ -1,6 +1,6 @@
 <p>
-    <a class="get-your-own" href="//dupunkto.org/neopub">[ (っ◔◡◔)っ get your own neolog ]</a>
+    <a class="get-your-own" href="//dupunkto.org/pubb">[ (っ◔◡◔)っ get your own microblog ]</a>
 </p>
 <p>
-    neopub is a <a href="//dupunkto.org">{du}punkto</a> project
+    pubb is a <a href="//dupunkto.org">{du}punkto</a> project
 </p>
