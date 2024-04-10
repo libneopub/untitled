@@ -16,7 +16,8 @@ This project is very much an attempt at self-dogfooding.
 - [x] Sending pingbacks
 - [x] Receiving webmentions
 - [x] Receiving pingbacks
-- [ ]
+- [x] RSS, Atom & JSON feeds
+- [ ] ActivityPub
 - [ ] It works
 - [ ] CLI
 
@@ -37,6 +38,12 @@ Easy publishing from my phone. Hit icon, type something, attach picture, post.
 
 Easy publishing from my laptop. Writing post in Markdown in Neovim, pasting
 images (automatically uploading to u.roblog.nl, with -n flag).
+
+## Non-goals
+
+Tests. I get it, their important for ensuring code quality and confidence in codebases in professional settings. But this is a side-project that I'm building in my spare time, for fun. Don't ruin that for me please.
+
+Bookmarks, crossposts, likes. I want to encourage conversation, collaboration and meaningful interaction. Mindlessly double tapping doesn't fit that vision.
 
 ### Ideas
 
