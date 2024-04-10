@@ -48,11 +48,31 @@ function last_updated() {
   return $latest_post["published"];
 }
 
+function put_mention($year, $id, $source) {
+  $feed = feed_for_post($year, $id);
+  $mentions = list_mentions($year, $id);
+
+  array_unshift($mentions, $source);
+  file_put_contents($feed, json_encode($mentions));
+}
+
+function list_mentions($year, $id) {
+  $feed = feed_for_post($year, $id);
+  $mentions_json = file_get_contents($feed);
+
+  return json_decode($mentions_json);
+}
+
 // Helpers
 
 function feed_for_year($year) {
   global $BASE;
   return $BASE . "$year.json";
+}
+
+function feed_for_post($year, $id) {
+  global $BASE;
+  return $BASE . "mentions/$year/$id.json";
 }
 
 function path_from_datetime($ext) {

@@ -1,5 +1,5 @@
 <?php
-// Handles sending and receiving webmentions.
+// Handles sending webmentions.
 
 namespace webmentions;
 

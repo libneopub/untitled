@@ -6,8 +6,20 @@ function is_whitespace($c) {
 }
 
 function normalize_url($url) {
-  if (substr($url, -1) != "/") {
-      return $url .= "/";
+  $url = replace_prefix($url, "http://", "https://");
+  
+  if (!str_ends_with($str, "/")) {
+    return $url .= "/";
+  } else {
+    return $url;
+  }
+}
+
+function replace_prefix($str, $old, $new) {
+  if(str_starts_with($str, $old)) {
+    return $new . substr($str, strlen($old));
+  } else {
+    return $str;
   }
 }
 

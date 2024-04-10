@@ -1,5 +1,5 @@
 <?php
-// Handles sending and receiving pingbacks.
+// Handles sending pingbacks.
 
 namespace pinkbacks;
 
@@ -50,7 +50,8 @@ function discover_endpoint($target_url) {
   return false;
 }
 
-// Stolen from indieweb/mention-client-php, licensed 
+// Stolen from indieweb/mention-client-php, 
+// dual-licensed Apache 2.0, MIT.
 function xmlrpc_encode_request($method, $params) {
   $xml  = '<?xml version="1.0"?>';
   $xml .= '<methodCall>';
