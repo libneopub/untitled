@@ -17,15 +17,23 @@ function render_post($post) {
   <?php
 }
 
-function render_content() {
+function render_content($post) {
   global $BASE;
 
   // Render a photo.
   if($post["type"] == "photo") {
+    $parser = new Parsedown();
+
     $url = $post["url"] ?? \urls\photo_url($post["path"]);
+    $caption = $parser->text($post["caption"]);
+
     ?>
       <figure>
-        <img src="<?= $url ?>" alt="<?= $caption ?>">
+        <img 
+          class="u-photo" 
+          src="<?= $url ?>" 
+          alt="<?= strip_tags($post["caption"]) ?>"
+        />
         <figcaption><?= $caption ?></figcaption>
       </figure> 
     <?php
@@ -34,7 +42,7 @@ function render_content() {
   // Render a code snippet
   else if($post["type"] == "code") {
     $code = file_get_contents($post["path"]);
-    echo '<pre><code>' . $code . '</code></pre>';
+    echo '<pre><code>' . htmlspecialchars($code) . '</code></pre>';
   } 
 
   // Render other content.
