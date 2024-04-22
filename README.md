@@ -17,6 +17,7 @@ This project is very much an attempt at self-dogfooding.
 - [x] Receiving webmentions
 - [x] Receiving pingbacks
 - [x] RSS, Atom & JSON feeds
+- [x] Comment section
 - [ ] ActivityPub
 - [ ] It works
 - [ ] CLI
