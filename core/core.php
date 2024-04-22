@@ -9,6 +9,11 @@ function publish_post($post) {
   return \store\put_post($year, $post);
 }
 
+function list_mentions($post) {
+  $year = \dates\year($post["published"]);
+  return \store\list_mentions($year, $post["id"]);
+}
+
 function send_webmentions($post) {
   $source_url = post_url($post);
   $targets = []; // TODO(robin): get all URLs from post.

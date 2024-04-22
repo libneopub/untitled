@@ -17,6 +17,33 @@ function render_post($post) {
   <?php
 }
 
+function render_comment_section($post) {
+  global $WEBMENTION_ENDPOINT;
+
+  ?>
+    <aside>
+      <h2>Webmentions</h2>
+
+      <ul>
+        <?php foreach($url in \core\list_mentions($post)) { ?>
+          <li><a href="<?= $url ?>"><?= parse_url($url, PHP_URL_HOST) ?></a></li>
+        <?php } ?>
+      </ul>
+
+      <form action="<?= $WEBMENTION_ENDPOINT ?>" method="post">
+        <p>
+          This post accepts <a href="//indieweb.org/Webmention">Webmentions</a>. 
+          Have you written a reply? Let me know the URL:
+        </p>
+
+        <input name="target" type="hidden" value="<?= \urls\post_url($post) ?>">
+        <input name="source" type="url" placeholder="https://example.com/your/reply">
+
+        <input type="submit" value="Send webmention">
+    </aside>
+  <?php
+}
+
 function render_content($post) {
   global $BASE;
 
