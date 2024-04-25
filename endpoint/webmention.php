@@ -56,3 +56,5 @@ if(preg_match($path_pattern, $path, $matches)) {
 
   \store\put_mention($year, $id, $source);
 }
+
+header('Link: ' . $target);
