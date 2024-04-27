@@ -4,5 +4,5 @@ PORT=4000
 ENTRYPOINT="index.php"
 
 serve() {
-	php -S localhost:$PORT $ENTRYPOINT
+	php -S 0.0.0.0:$PORT $ENTRYPOINT
 }

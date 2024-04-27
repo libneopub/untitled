@@ -111,7 +111,7 @@ function parse_link_header($link_values) {
           else $state = "param_value_start";
           break;
         case "quoted_param_value_start":
-          if ('"' == $chr) $state = "quoted_param_value_end';
+          if ('"' == $chr) $state = "quoted_param_value_end";
           else $param_value .= $chr;
           break;
         case "quoted_param_value_end":

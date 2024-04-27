@@ -1,6 +1,12 @@
 <?php
 // Public facing rendering engine.
 
+// Enable error reporting for development
+// TODO(robin): turn this off before deploying!!
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+ini_set("display_startup_errors", 1);
+
 require_once __DIR__ . "/config.php";
 require_once __DIR__ . "/core.php";
 require_once __DIR__ . "/router.php";
@@ -35,7 +41,7 @@ switch(true) {
     $year = $params[1];
     $id = $params[2];
 
-    $post = \store\get_post($year, $id)
+    $post = \store\get_post($year, $id);
     if(!$post) $not_found = true;
     
     break;

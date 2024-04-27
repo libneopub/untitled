@@ -4,14 +4,16 @@
 $PUBB_VERSION = "0.1a";
 $BASE = __DIR__ . "../data/";
 
-require_once __DIR__ . "/core/headers.php";
+require_once __DIR__ . "/core/core.php";
+require_once __DIR__ . "/core/store.php";
 require_once __DIR__ . "/core/utils.php";
 require_once __DIR__ . "/core/http.php";
 require_once __DIR__ . "/core/dates.php";
 require_once __DIR__ . "/core/urls.php";
-require_once __DIR__ . "/core/posts.php";
 require_once __DIR__ . "/core/webmentions.php";
 require_once __DIR__ . "/core/pingbacks.php";
+require_once __DIR__ . "/core/renderer.php";
+require_once __DIR__ . "/core/headers.php";
 
 // Method to debug the micropub endpoint. It crashes the 
 // endpoint and logs the request to log.json

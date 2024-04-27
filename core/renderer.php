@@ -25,7 +25,7 @@ function render_comment_section($post) {
       <h2>Webmentions</h2>
 
       <ul>
-        <?php foreach($url in \core\list_mentions($post)) { ?>
+        <?php foreach(\core\list_mentions($post) as $url) { ?>
           <li><a href="<?= $url ?>"><?= parse_url($url, PHP_URL_HOST) ?></a></li>
         <?php } ?>
       </ul>
