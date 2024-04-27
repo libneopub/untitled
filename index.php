@@ -25,25 +25,32 @@ switch(true) {
     header("Location: $CANONICAL/" . date("Y"));
     exit;
 
-  case route('|/(\d{4})|'):
+  case route('@/assets/.*$@'):
+    # Serve files as-is. Only applies to the development server,
+    # in prod this will be handled by Apache directly.
+    return false;
+
+  case route('@/(\d{4})$@'):
     $year = $params[1];
+    $posts = \store\list_posts($year);
+    
     break;
 
-  case route('|/(\d{4})/(toots|replies|photos|code)|'):
+  case route('@/(\d{4})/(toots|replies|photos|code)$@'):
     $year = $params[1];
     $type = $page_types[$params[2]];
     
     $posts = \store\list_posts_by_type($year, $type);
-    
+
     break;
 
-  case route('|/(\d{4})/(\w+)|'):
+  case route('@/(\d{4})/(\w+)$@'):
     $year = $params[1];
     $id = $params[2];
 
     $post = \store\get_post($year, $id);
     if(!$post) $not_found = true;
-    
+
     break;
 
   case true:
@@ -70,10 +77,14 @@ if($not_found) {
       <?php
 
         switch(true) {
-          case isset($post):
+          case isset($post) && $post !== false:
             \renderer\render_post($post);
             \renderer\render_comment_section($post);
             
+            break;
+
+          case isset($posts) && count($posts) === 0:
+            \renderer\render_info("Nothing here. (anymore?)");
             break;
 
           case isset($posts):

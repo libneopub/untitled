@@ -29,15 +29,29 @@ function put_post($year, $post) {
 }
 
 function get_post($year, $id) {
-  foreach (list_posts($year) as $post) 
-    if ($post["id"] === $id) return $post;
+  foreach (list_posts($year) as $post) {
+    if ($post['id'] === $id) return $post;
+  }
+  
+  return false;
 }
 
 function list_posts($year) {
   $feed = feed_for_year($year);
-  $posts_json = file_get_contents($feed);
+  
+  if($posts_json = file_get_contents($feed)) {
+    return json_decode($posts_json);
+  } else {
+    return [];
+  }
+}
 
-  return json_decode($posts_json);
+function list_posts_by_type($year, $type) {
+  $posts = list_posts($year);
+
+  return array_filter($posts, function($post) use($type) {
+    return $post['type'] === $type;
+  });
 }
 
 function last_updated() {

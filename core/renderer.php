@@ -3,6 +3,24 @@
 
 namespace renderer;
 
+function render_info($message) {
+  render_message("info", $message);
+}
+
+function render_warn($message) {
+  render_message("warn", $message);
+}
+
+function render_error($message) {
+  render_message("error", $message);
+}
+
+function render_message($kind, $message) {
+  ?>
+    <p class="<?= $kind ?>"><?= $message ?></p>
+  <?php
+}
+
 function render_post($post) {
   ?>
     <article class="h-entry">

@@ -2,7 +2,12 @@
 // Core neopub APIs live here.
 
 $PUBB_VERSION = "0.1a";
-$BASE = __DIR__ . "../data/";
+$BASE = __DIR__ . "/../data/";
+
+// Initialize data store if it doesn't exist yet
+if(!is_dir($BASE)) {
+    mkdir($BASE);
+}
 
 require_once __DIR__ . "/core/core.php";
 require_once __DIR__ . "/core/store.php";
