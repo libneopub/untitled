@@ -27,10 +27,10 @@ LimitRequestBody 102400
 	RewriteCond %{SCRIPT_FILENAME} -f
 	RewriteRule "(^|/)\." - [F]
 
-	# Routing (yea I know, it sucks)
-	RewriteRule ^([0-9]{4})$ index.php?year=$1 [QSA,L] 										# Route: /:year
-	RewriteRule ^([0-9]{4})/([^/]+)$ index.php?year=$1&type=$2 [QSA,L]		# Route: /:year/:type
-	RewriteRule ^([0-9]{4})/([0-9]+)$ index.php?year=$1&id=$2 [QSA,L]		  # Route: /:year/:id
+	# PHP-based routing (yippie!!)
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^(.*)$ index.php/$1 [L]
 </IfModule>
 
 # Preserve bandwidth for PHP enabled servers

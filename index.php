@@ -3,35 +3,7 @@
 
 require_once __DIR__ . "/config.php";
 require_once __DIR__ . "/core.php";
-
-/*
-  Routes (via Rewrite Magic™):
-
-  / -> /:year     redirects to current year
-  /:year          listing of all posts        $_GET['year']
-  /:year/:type    listing of a type           $_GET['year'] + $_GET['type']
-  /:year/:id      permalink to a post         $_GET['year'] + $_GET['id']
-
-  Post types:
-
-  - toots
-  - replies
-  - photos
-  - code
-
-  Other URLs (served from Apache):
-
-  /raw/:id       permalinks to raw files in `data`
-*/
-
-if(!isset($_GET["year"])) {
-  header($_SERVER["SERVER_PROTOCOL"] . " 302 Found");
-  header("Location: $CANONICAL/" . date("Y"));
-  exit;
-}
-else {
-  $year = $_GET["year"];
-}
+require_once __DIR__ . "/router.php";
 
 // Maps URL type -> store type
 $page_types = array(
@@ -41,15 +13,40 @@ $page_types = array(
   "code" => "code"
 );
 
-if(isset($_GET["id"])) {
-  $post = \store\get_post($year, $_GET["id"]);
-} 
-else if(isset($_GET["type"])) {
-  $type = $page_types[$_GET["type"]];
-  $posts = \store\list_posts_by_type($year, $type);
-} 
-else {
-  $posts = \store\list_posts($year);
+switch(true) {
+  case $path === "/":
+    header($_SERVER["SERVER_PROTOCOL"] . " 302 Found");
+    header("Location: $CANONICAL/" . date("Y"));
+    exit;
+
+  case route('/(\d{4})'):
+    $year = $params[1];
+    break;
+
+  case route('/(\d{4})/(toots|replies|photos|code)'):
+    $year = $params[1];
+    $type = $page_types[$params[2]];
+    
+    $posts = \store\list_posts_by_type($year, $type);
+    
+    break;
+
+  case route('/(\d{4})/(\w+)'):
+    $year = $params[1];
+    $id = $params[2];
+
+    $post = \store\get_post($year, $id)
+    if(!$post) $not_found = true;
+    
+    break;
+
+  case true:
+    $not_found = true;
+    break;
+}
+
+if($not_found) {
+  header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
 }
 
 ?>
@@ -65,20 +62,26 @@ else {
     </header>
     <main <?php if(isset($posts)) echo 'class="h-feed"' ?>>
       <?php 
-        
-        // Render a single post.
-        if(isset($post)) {
-          \renderer\render_post($post);
-          \renderer\render_comment_section($post);
-        } 
-        
-        // Render listing.
-        else {
-          foreach($posts as $post) {
-            \renderer\render_post($post);
-          }
-        }
 
+        switch(true) {
+          case isset($post):
+            \renderer\render_post($post);
+            \renderer\render_comment_section($post);
+            
+            break;
+
+          case isset($posts):
+            foreach($posts as $post) {
+              \renderer\render_post($post);
+            }
+            
+            break;
+
+          case $not_found:
+            include "partials/404.php";
+            break;
+        }
+        
       ?>
     </main>
     <aside>
