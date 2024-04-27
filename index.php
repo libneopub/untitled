@@ -25,11 +25,11 @@ switch(true) {
     header("Location: $CANONICAL/" . date("Y"));
     exit;
 
-  case route('/(\d{4})'):
+  case route('|/(\d{4})|'):
     $year = $params[1];
     break;
 
-  case route('/(\d{4})/(toots|replies|photos|code)'):
+  case route('|/(\d{4})/(toots|replies|photos|code)|'):
     $year = $params[1];
     $type = $page_types[$params[2]];
     
@@ -37,7 +37,7 @@ switch(true) {
     
     break;
 
-  case route('/(\d{4})/(\w+)'):
+  case route('|/(\d{4})/(\w+)|'):
     $year = $params[1];
     $id = $params[2];
 
@@ -67,7 +67,7 @@ if($not_found) {
       <?php include "partials/header.php" ?>
     </header>
     <main <?php if(isset($posts)) echo 'class="h-feed"' ?>>
-      <?php 
+      <?php
 
         switch(true) {
           case isset($post):

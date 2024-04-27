@@ -1,7 +1,7 @@
 <?php
 
-$HOST = "u.roblog.nl";
-$CANONICAL = "https://$HOST"; // OMIT THE TRAILING SLASH
+$HOST = "localhost:4000";
+$CANONICAL = "http://$HOST"; // OMIT THE TRAILING SLASH
 $MAIN_SITE = $CANONICAL;
 
 $SITE_LANG = "en";
