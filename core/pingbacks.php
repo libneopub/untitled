@@ -13,30 +13,24 @@ function send_pingback($source_url, $target_url) {
     $target_url
   ));
 
-  $options = array(
-    CURLOPT_POST => true,
-    CURLOPT_POSTFIELDS => $payload,
-    CURLOPT_HTTPHEADER => array(
-        "application/xml"
-    )
-  );
-
-  $response = \http\request($endpoint, $options);
+  $response = \http\post($endpoint, $payload, [
+    "Content-Type" => "application/xml"
+  ]);
 
   // Collapse whitespace just to be safe
-  $body = strtolower(preg_replace('/\s+/', '', $response["body"]));
+  $body = strtolower(preg_replace('/\s+/', "", $response['body']));
 
   // Check if request was successful
-  if ($response["status"] !== 200 || empty($body)) return false;
-  if (strpos($body, '<fault>') || !strpos($body, '<string>')) return false;
+  if ($response['status'] !== 200 || empty($body)) return false;
+  if (strpos($body, "<fault>") || !strpos($body, "<string>")) return false;
 
-  return $response;
+  return $response['body'];
 }
 
 function discover_endpoint($target_url) {
-  $response = \http\request($target_url, array(CURLOPT_HTTPGET => true));
-  $header = $response['headers']['X-Pingback'];
-  $body = strip_comments($response["body"]);
+  $response = \http\get($target_url);
+  [$header] = $response['headers']['X-Pingback'];
+  $body = strip_comments($response['body']);
   
   if($header) return $header;
 

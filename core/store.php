@@ -45,7 +45,7 @@ function last_updated() {
   $posts = list_posts($current_year);
   $latest_post = $posts[0];
 
-  return $latest_post["published"];
+  return $latest_post['published'];
 }
 
 function put_mention($year, $id, $source) {

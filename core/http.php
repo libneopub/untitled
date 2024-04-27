@@ -3,27 +3,32 @@
 
 namespace http;
 
-function request($target_url, $options = []) {
+function request($uri, $headers = [], $options = []) {
   global $CANONICAL;
 
-  $headers = [];
-
   $ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, $target_url);
-  curl_setopt($ch, CURLOPT_USERAGENT, $CANONICAL);
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-  curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 
+  curl_setopt_array($ch, [
+    CURLOPT_URL => $uri,
+    CURLOPT_USERAGENT => $CANONICAL,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_TIMEOUT => 5,
+
+    // Request headers
+    CURLOPT_HTTPHEADER => flatten(": ", $headers);
+  ])
+  
+  curl_setopt_array($ch, $options);
+
+  // Response headers
+  $headers = [];
   curl_setopt($ch, CURLOPT_HEADERFUNCTION,
-    function ($curl, $header) use (&$headers) {
-      $len = strlen($header);
-      $header = explode(':', $header, 2);
-      if (count($header) < 2) // ignore invalid headers
-        return $len;
+    function ($ch, $header) use (&$headers) {
+      [$name, $value] = explode(":", $header, 2);
+      $name = strtolower(trim($name));
+      $headers[$name][] = trim($value);
 
-      $headers[strtolower(trim($header[0]))][] = trim($header[1]);
-
-      return $len;
+      return strlen($header);
     }
   );
 
@@ -36,4 +41,47 @@ function request($target_url, $options = []) {
     "headers" => $headers,
     "body" => $response
   ];
+}
+
+function get($uri, $headers = []) {
+  $options = [
+    CURLOPT_HTTPGET => true,
+    CURLOPT_RETURNTRANSFER => true
+  ];
+
+  return request($uri, $headers, $options);
+}
+
+function post($uri, $data = [], $headers = []) {
+  $options = [
+    CURLOPT_POST => true,
+    CURLOPT_POSTFIELDS => $data,
+    CURLOPT_RETURNTRANSFER => true
+  ];
+
+  return request($uri, $headers, $options);
+}
+
+function head($uri, $headers = []) {
+  $options = [
+    CURLOPT_NOBODY => true,
+    CURLOPT_RETURNTRANSFER => true
+  ];
+
+  return request($uri, $headers, $options);
+}
+
+function download($uri, $destination, $headers) {
+  $fp = fopen($destination, "w+");
+
+  $options = [
+    CURLOPT_HTTPGET => true,
+    CURLOPT_FILE => $fp,
+    CURLOPT_RETURNTRANSFER => false
+  ];
+
+  $response = request($uri, $headers, $options);
+  fclose($fp);
+
+  return $response;
 }

@@ -6,8 +6,8 @@ namespace renderer;
 function render_post($post) {
   ?>
     <article class="h-entry">
-      <?php if($post["title"]) {
-        echo '<h1 class="p-name">' . $post["title"] . '</h1>';
+      <?php if($post['title']) {
+        echo '<h1 class="p-name">' . $post['title'] . '</h1>';
       } ?>
 
       <section class="p-summary e-content">
@@ -48,10 +48,10 @@ function render_content($post) {
   global $BASE;
 
   // Render a photo.
-  if($post["type"] == "photo") {
+  if($post['type'] == "photo") {
     $parser = new Parsedown();
 
-    $url = $post["url"] ?? \urls\photo_url($post["path"]);
+    $url = $post['url'] ?? \urls\photo_url($post['path']);
     $caption = $parser->text($post["caption"]);
 
     ?>
@@ -67,15 +67,15 @@ function render_content($post) {
   } 
 
   // Render a code snippet
-  else if($post["type"] == "code") {
-    $code = file_get_contents($post["path"]);
+  else if($post['type'] == "code") {
+    $code = file_get_contents($post['path']);
     echo '<pre><code>' . htmlspecialchars($code) . '</code></pre>';
   } 
 
   // Render other content.
   else {
     $parser = new Parsedown();
-    $content = file_get_contents($post["path"]);
+    $content = file_get_contents($post['path']);
 
     echo $parser->text($content);
   }

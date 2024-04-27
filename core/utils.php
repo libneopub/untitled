@@ -7,6 +7,7 @@ function is_whitespace($c) {
 
 function normalize_url($url) {
   $url = replace_prefix($url, "http://", "https://");
+  $url = strtolower($url);
   
   if (!str_ends_with($str, "/")) {
     return $url .= "/";
@@ -24,5 +25,14 @@ function replace_prefix($str, $old, $new) {
 }
 
 function strip_comments($body) {
-  return preg_replace('/<!--(.*)-->/Us', '', $body);
+  return preg_replace('/<!--(.*)-->/Us', "", $body);
+}
+
+function flatten($separator, $array) {
+  $keys = array_keys($array);
+  $values = array_values($array);
+  
+  return array_map(function($key, $value) use ($separator) {
+    return $key . $seperator . $value;
+  }, $keys, $values);
 }

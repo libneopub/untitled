@@ -11,6 +11,6 @@ function photo_url($path) {
 function post_url($post) {
   global $CANONICAL;
 
-  $year_published = \dates\year($post["published"]);
-  return $CANONICAL . "/" . $year_published . "/" . $post["id"];
+  $year_published = \dates\year($post['published']);
+  return $CANONICAL . "/" . $year_published . "/" . $post['id'];
 }

@@ -5,13 +5,13 @@
 namespace core;
 
 function publish_post($post) {
-  $year = \dates\year($post["published"]);
+  $year = \dates\year($post['published']);
   return \store\put_post($year, $post);
 }
 
 function list_mentions($post) {
-  $year = \dates\year($post["published"]);
-  return \store\list_mentions($year, $post["id"]);
+  $year = \dates\year($post['published']);
+  return \store\list_mentions($year, $post['id']);
 }
 
 function send_webmentions($post) {
