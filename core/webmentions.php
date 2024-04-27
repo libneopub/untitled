@@ -80,34 +80,25 @@ function parse_link_header($link_values) {
           if (">" == $chr) {
             $state = "uri_end";
             $link['uri'] = $uri;
-
           }
           else $uri .= $chr;
           break;
         case "uri_end":
-          if (";" == $chr) {
-            $state = "param_start";
-          }
+          if (";" == $chr) $state = "param_start";
           break;
         case "param_start":
-          if (!is_whitespace($chr))
-          {
+          if (!is_whitespace($chr)) {
             $state = "param_name_start";
             $param_name = $chr;
           }
-          else continue;
           break;
         case "param_name_start":
-          if ("=" == $chr) {
-            $state = "param_name_end";
-          }
+          if ("=" == $chr) $state = "param_name_end";
           else $param_name .= $chr;
           break;
         case "param_name_end":
           $param_value = "";
-          if ('"' == $chr) {
-            $state = "quoted_param_value_start";
-          }
+          if ('"' == $chr) $state = "quoted_param_value_start";
           else $state = "param_value_start";
           break;
         case "quoted_param_value_start":
