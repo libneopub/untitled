@@ -4,5 +4,11 @@
 namespace stats;
 
 function record_view($path) {
-  \store\put_view(date("Y"), date("m"), $path);
+  $year = date("Y");
+  $month = date("m");
+  
+  \store\put_view($year, $month, [
+    "datetime" => date("Y-m-d H:i:s"),
+    "url" => $path
+  ]);
 }
