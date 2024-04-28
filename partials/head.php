@@ -11,10 +11,10 @@
 // Try to load stylesheet by year if it exists.
 // Otherwise, fall back to the generic stylesheet.
 
-$yearly = "/assets/$year/main.css";
-$general = "/assets/main.css";
+$yearly = "/styles/$year.css";
+$general = "/default.css";
 
-$stylesheet = file_exists(__DIR__ . "../$yearly") ? $yearly : $general;
+$stylesheet = file_exists($STORE . $yearly) ? $yearly : $general;
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?= $stylesheet ?>">

@@ -1,10 +1,8 @@
 <?php
 // Pretty decent routing based on regexes.
 //
-// This files exposes four globals:
+// This files exposes two globals:
 //
-//   $https (bool) indicates whether the current connection is secured.
-//   $not_found (bool) can be used to indicate a 404.
 //   $path (string) is the request path, after applying normalization.
 //   $params (array) contains capture groups from the route regex.
 //
@@ -14,10 +12,16 @@ $path = explode("?", $path)[0];
 $path = "/" . trim($path, "/");
 
 $params = [];
-$https = $_SERVER['HTTPS'] === "on";
-$not_found = false;
 
 function route($pattern) {
   global $path, $params;
   return preg_match($pattern, $path, $params);
+}
+
+function is_builtin() {
+  return php_sapi_name() === "cli-server";
+}
+
+function is_https() {
+  return !is_builtin() && $_SERVER['HTTPS'] === "on";
 }

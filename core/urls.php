@@ -5,7 +5,7 @@ namespace urls;
 
 function photo_url($path) {
   global $CANONICAL;
-  return $CANONICAL . "/raw/" . basename($path);
+  return $CANONICAL . "/uploads/" . basename($path);
 }
 
 function post_url($post) {

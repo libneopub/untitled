@@ -5,6 +5,8 @@ require_once __DIR__ . "/config.php";
 require_once __DIR__ . "/core.php";
 require_once __DIR__ . "/router.php";
 
+$not_found = false;
+
 // Maps URL type -> store type
 $page_types = array(
   "toots" => "toot",
@@ -14,7 +16,7 @@ $page_types = array(
 );
 
 switch(true) {
-  case !$https && $FORCE_HTTPS:
+  case !is_https() && $FORCE_HTTPS:
     header($_SERVER['SERVER_PROTOCOL'] . " 301 Moved Permanently");
     header("Location: https://$HOST" . $_SERVER['REQUEST_URI']);
     exit;
@@ -24,9 +26,9 @@ switch(true) {
     header("Location: $CANONICAL/" . date("Y"));
     exit;
 
-  case route('@/assets/.*$@'):
-    # Serve files as-is. Only applies to the development server,
-    # in prod this will be handled by Apache directly.
+  case is_file(__DIR__ . $path) && is_builtin():
+    # Serve file as-is. Only applies to the development server,
+    # in production this will be handled by Apache directly.
     return false;
 
   case route('@/(\d{4})$@'):
@@ -53,6 +55,7 @@ switch(true) {
     break;
 
   default:
+    $year = date("Y");
     $not_found = true;
     break;
 }

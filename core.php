@@ -2,7 +2,7 @@
 // Core neopub APIs live here.
 
 $PUBB_VERSION = "0.1a";
-$STORE = __DIR__ . "/../data/";
+$STORE = __DIR__ . "/data";
 
 require_once __DIR__ . "/init.php";
 require_once __DIR__ . "/core/core.php";
@@ -31,10 +31,3 @@ function debug_endpoint()
 
     exit;
 }
-
-// Enable error reporting for development
-// TODO(robin): turn this off before deploying!!
-error_reporting(E_ALL);
-ini_set("display_errors", 1);
-ini_set("display_startup_errors", 1);
-
