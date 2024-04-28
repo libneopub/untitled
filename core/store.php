@@ -118,7 +118,7 @@ function write_json($path, $new, $default = []) {
   array_unshift($existing, $new);
 
   if(!is_dir(dirname($path))) {
-    mkdir(dirname($path), 0777, true);
+    mkdir(dirname($path), recursive: true);
   }
 
   file_put_contents($path, json_encode($existing));

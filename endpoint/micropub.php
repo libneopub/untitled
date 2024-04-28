@@ -12,11 +12,11 @@ require_once __DIR__ . "/../core.php";
 // Configuration requests don't need authentication
 if ($_GET["q"] === "config") {
     header($_SERVER['SERVER_PROTOCOL'] . " 200 OK");
-    echo json_encode(array("media-endpoint" => $MEDIA_ENDPOINT));
+    echo json_encode(["media-endpoint" => $MEDIA_ENDPOINT]);
     exit;
 }
 
-include __DIR__ . "/auth.php";
+include __DIR__ . "/authenticate.php";
 
 // First, perform some checks to filter out requests that use features that
 // we (intentionally) don't support.
