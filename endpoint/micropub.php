@@ -47,7 +47,7 @@ $reply_to = $_POST['in-reply-to'];
 
 // If `published` is given, use that, otherwise,
 // fall back to the current datetime.
-$published = $_POST['published'] ?? date("Y");
+$published = $_POST['published'] ?? date("c");
 $published = date("c", strtotime($published));
 
 if (isset($_FILES['photo'])) {

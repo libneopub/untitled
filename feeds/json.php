@@ -14,21 +14,21 @@ $entries = [];
 
 foreach($posts as $post) {
   $entries[] = array(
-    "id" => $post["id"],
+    "id" => $post['id'],
     "url" => \urls\post_url($post),
-    "title" => $post["title"],
+    "title" => $post['title'],
     "content_html" => \renderer\render_content($post),
-    "date_published" => $post["published"] . "Z"
+    "date_published" => $post['published'] . "Z"
   );
 }
 
 echo json_encode(array(
   "version" => "https://jsonfeed.org/version/1.1",
-  "title" => $SITE_TITLE,
-  "description" => $SITE_DESCRIPTION,
-  "language" => $SITE_LANG,
-  "author" => $SITE_AUTHOR,
-  "home_page_url" => "$CANONICAL/",
-  "feed_url" => "$CANONICAL/feed.json",
+  "title" => SITE_TITLE,
+  "description" => SITE_DESCRIPTION,
+  "language" => SITE_LANG,
+  "author" => AUTHOR_NAME,
+  "home_page_url" => CANONICAL . "/",
+  "feed_url" => CANONICAL . "/feed.json",
   "items" => $entries
 ));

@@ -1,8 +1,8 @@
 <?php
 // Core neopub APIs live here.
 
-$PUBB_VERSION = "0.1a";
-$STORE = __DIR__ . "/data";
+define('PUBB_VERSION', "0.1a");
+define('STORE', __DIR__ . "/data");
 
 require_once __DIR__ . "/init.php";
 require_once __DIR__ . "/core/core.php";
@@ -29,9 +29,7 @@ function debug_endpoint()
     echo "You sent:\n";
     print_r($_POST);
 
-    $file = fopen(__DIR__."/log.json", "w+");
-    fwrite($file, json_encode($_POST));
-    fclose($file);
+    file_put_contents(__DIR__ . "/log.json", json_encode($_POST));
 
     exit;
 }

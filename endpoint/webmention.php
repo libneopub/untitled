@@ -17,8 +17,9 @@ if (!isset($_POST['target'])) {
 }
 
 $target = normalize_url($_POST['target']);
+$our_site = normalize_url(CANONICAL);
 
-if(!str_starts_with($target, $CANONICAL)) {
+if(!str_starts_with($target, $our_site) {
   header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
   echo "You can only send webmentions for URLs hosted on this site.";
   exit;
@@ -28,7 +29,7 @@ if(!str_starts_with($target, $CANONICAL)) {
 
 ob_start();
 $ch = curl_init($_POST['source']);
-curl_setopt($ch, CURLOPT_USERAGENT, $CANONICAL);
+curl_setopt($ch, CURLOPT_USERAGENT, CANONICAL);
 curl_setopt($ch, CURLOPT_HEADER, 0);
 $ok = curl_exec($ch);
 curl_close($ch);
@@ -54,10 +55,13 @@ if(preg_match($path_pattern, $path, $matches)) {
   $year = $matches[1];
   $id = $matches[2];
 
-  \store\put_mention($year, $id, $source);
+  \store\put_mention($year, $id, $_POST['source']);
 
   $url = \urls\post_url($year, $id);
-  \notifications\new_webmention($url, $source);
 }
 
+\notifications\new_webmention($_POST['target'], $_POST['source']);
+
+// Redirect to target page, useful in case of sending 
+// a webmention via the form in the comment section.
 header('Link: ' . $target);

@@ -12,4 +12,4 @@ header("Cross-Origin-Opener-Policy: same-origin");
 header("Access-Control-Allow-Origin: *"); 
 
 // Shameless self-promotion
-header("X-Powered-By: Pubb (v$PUBB_VERSION)");
+header("X-Powered-By: Pubb (v" . PUBB_VERSION . ")");

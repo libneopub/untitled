@@ -9,19 +9,19 @@ ini_set("display_errors", 1);
 ini_set("display_startup_errors", 1);
 
 // Initialize data store if it doesn't exist yet
-if(!is_dir($STORE)) {
-  mkdir($STORE);
-  mkdir("$STORE/posts");
-  mkdir("$STORE/mentions");
-  mkdir("$STORE/styles");
-  mkdir("$STORE/uploads");
-  mkdir("$STORE/stats");
+if(!is_dir(STORE)) {
+  mkdir(STORE);
+  mkdir(STORE . "/posts");
+  mkdir(STORE . "/mentions");
+  mkdir(STORE . "/styles");
+  mkdir(STORE . "/uploads");
+  mkdir(STORE . "/stats");
 
-  @symlink("$STORE/styles", __DIR__ . "/styles");
-  @symlink("$STORE/uploads", __DIR__ . "/uploads");
+  @symlink(STORE . "/styles", __DIR__ . "/styles");
+  @symlink(STORE . "/uploads", __DIR__ . "/uploads");
 }
 
-// Prevent mixed-content warnings
-if($FORCE_HTTPS) {
-  replace_prefix($CANONICAL, "http://", "https://");
+// Error for mismatches between CANONICAL and FORCE_HTTPS
+if(FORCE_HTTPS && str_starts_with(CANONICAL, "http://")) {
+  die("Error: you've set FORCE_HTTPS to true, but the CANONICAL still contains http:// (instead of https://). This can potentially cause mixed content warnings, and messes with the canonical URL of your site!");
 }

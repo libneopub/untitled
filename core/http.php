@@ -4,13 +4,11 @@
 namespace http;
 
 function request($uri, $headers = [], $options = []) {
-  global $CANONICAL;
-
   $ch = curl_init();
 
   curl_setopt_array($ch, [
     CURLOPT_URL => $uri,
-    CURLOPT_USERAGENT => $CANONICAL,
+    CURLOPT_USERAGENT => CANONICAL,
     CURLOPT_FOLLOWLOCATION => true,
     CURLOPT_TIMEOUT => 5,
 

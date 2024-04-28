@@ -16,14 +16,14 @@ $page_types = array(
 );
 
 switch(true) {
-  case !is_https() && $FORCE_HTTPS:
+  case !is_https() && FORCE_HTTPS:
     header($_SERVER['SERVER_PROTOCOL'] . " 301 Moved Permanently");
-    header("Location: https://$HOST" . $_SERVER['REQUEST_URI']);
+    header("Location: https://" . HOST . $_SERVER['REQUEST_URI']);
     exit;
   
   case $path === "/":
     header($_SERVER["SERVER_PROTOCOL"] . " 302 Found");
-    header("Location: $CANONICAL/" . date("Y"));
+    header("Location: " . CANONICAL . "/" . date("Y"));
     exit;
 
   case is_file(__DIR__ . $path) && is_builtin():
@@ -68,10 +68,10 @@ if($not_found) {
 
 ?>
 <!DOCTYPE html>
-<html lang="<?= $SITE_LANG ?>">
+<html lang="<?= SITE_LANG ?>">
   <head>
     <?php include "partials/head.php" ?>
-    <title><?= $SITE_TITLE; ?></title>
+    <title><?= SITE_TITLE ?></title>
   </head>
   <body>
     <header>

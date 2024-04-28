@@ -22,9 +22,6 @@ function render_message($kind, $message) {
 }
 
 function render_post($post) {
-  global $CANONICAL, $AUTHOR_NAME, $AUTHOR_PICTURE;
-  $timestamp = strtotime($post['published']);
-
   ?>
     <article class="h-entry">
       <?php if($post['title']) {
@@ -35,21 +32,21 @@ function render_post($post) {
         <?php render_content($post) ?>
       </div>
 
-      <time class="dt-published" datetime="<?= date("c", $timestamp) ?>">
+      <time class="dt-published" datetime="<?= $post['published'] ?>">
         <a class="u-url" href="<?= \urls\post_url($post) ?>">
-          <?= date("Y-m-d", $timestamp) ?>
+          <?= date("Y-m-d", strtotime($post['published'])) ?>
         </a>
       </time>
 
       <div class="p-author h-card">
-        <a class="u-url" href="<?= $CANONICAL ?>">
+        <a class="u-url" href="<?= CANONICAL ?>">
           <img
             class="u-photo"
-            src="<?= $AUTHOR_PICTURE ?>"
-            alt="<?= $AUTHOR_NAME ?>"
+            src="<?= AUTHOR_PICTURE ?>"
+            alt="<?= AUTHOR_NAME ?>"
             width="100"
           >
-          <p class="p-name"><?= $AUTHOR_NAME ?></p>
+          <p class="p-name"><?= AUTHOR_NAME ?></p>
         </a>
       </div>
     </article>
@@ -57,8 +54,6 @@ function render_post($post) {
 }
 
 function render_comment_section($post) {
-  global $WEBMENTION_ENDPOINT;
-
   ?>
     <aside>
       <h2>Webmentions</h2>
@@ -69,7 +64,7 @@ function render_comment_section($post) {
         <?php } ?>
       </ul>
 
-      <form action="<?= $WEBMENTION_ENDPOINT ?>" method="post">
+      <form action="<?= WEBMENTION_ENDPOINT ?>" method="post">
         <p>
           This post accepts <a href="//indieweb.org/Webmention">Webmentions</a>. 
           Have you written a reply? Let me know the URL:

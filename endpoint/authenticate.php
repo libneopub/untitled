@@ -21,7 +21,7 @@ if (!isset($_POST["h"])) {
     exit;
 }
 
-$response = \http\get($TOKEN_ENDPOINT, [
+$response = \http\get(TOKEN_ENDPOINT, [
     "Content-Type" => "application/x-www-form-urlencoded",
     "Authorization" => $_HEADERS['Authorization']
 ]);

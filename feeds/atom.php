@@ -11,20 +11,20 @@ echo '<?xml version="1.0" encoding="utf-8" standalone="yes"?>';
 
 ?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title><?= $SITE_TITLE ?></title>
-  <subtitle><?= $SITE_DESCRIPTION ?></subtitle>
-  <language><?= $SITE_LANG ?></language>
-  <id><?= $CANONICAL ?></id>
+  <title><?= SITE_TITLE ?></title>
+  <subtitle><?= SITE_DESCRIPTION ?></subtitle>
+  <language><?= SITE_LANG ?></language>
+  <id><?= CANONICAL ?></id>
   <updated><?= \store\last_updated() ?>Z</updated>
-  <link rel="self" href="<?= $CANONICAL ?>/atom.xml" type="application/rss+xml" />
+  <link rel="self" href="<?= CANONICAL ?>/atom.xml" type="application/rss+xml" />
 
   <author>
-    <name><?= $AUTHOR_NAME ?></name>
-    <uri><?= $CANONICAL ?></uri>
-    <?php if(isset($AUTHOR_EMAIL)) echo "<email>$AUTHOR_EMAIL</email>"; ?>
+    <name><?= AUTHOR_NAME ?></name>
+    <uri><?= CANONICAL ?></uri>
+    <?php if(isset($AUTHOR_EMAIL)) echo "<email>AUTHOR_EMAIL</email>"; ?>
   </author>
 
-  <generator uri="https://dupunkto.org/pubb" version="<?= $PUBB_VERSION ?>">
+  <generator uri="https://dupunkto.org/pubb" version="<?= PUBB_VERSION ?>">
     Pubb
   </generator>
 
@@ -34,9 +34,9 @@ echo '<?xml version="1.0" encoding="utf-8" standalone="yes"?>';
     foreach($posts as $post) {
       ?>
         <entry>
-          <title><?= $post["title"] ?></title>
-          <id><?= $post["id"] ?></id>
-          <updated><?= $post["published"] ?>Z</updated>
+          <title><?= $post['title'] ?></title>
+          <id><?= $post['id'] ?></id>
+          <updated><?= $post['published'] ?>Z</updated>
           <link rel="alternate" href="<?= \urls\post_url($post) ?>"/>
           <content>
             <![CDATA[ <?php \renderer\render_content($post); ?> ]]>

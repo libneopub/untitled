@@ -21,8 +21,7 @@ function upload_photo($tmp_file) {
 }
 
 function upload_contents($path) {
-  global $STORE;
-  return file_get_contents("$STORE/uploads/$path");
+  return file_get_contents(STORE . "/uploads/$path");
 }
 
 function put_post($year, $post) {
@@ -81,28 +80,23 @@ function list_views($year, $month) {
 // Helpers
 
 function feed_for_year($year) {
-  global $STORE;
-  return $STORE . "/posts/$year.json";
+  return STORE . "/posts/$year.json";
 }
 
 function feed_for_post($year, $id) {
-  global $STORE;
-  return $STORE . "/mentions/$year/$id.json";
+  return STORE . "/mentions/$year/$id.json";
 }
 
 function feed_for_month($year, $month) {
-  global $STORE;
-  return $STORE . "/stats/$year/$month.json";
+  return STORE . "/stats/$year/$month.json";
 }
 
 function path_from_datetime($ext) {
-  global $STORE;
-  return $STORE . "/uploads/" . date("Y-m-dTH:i:s") . $ext;
+  return STORE . "/uploads/" . date("Y-m-dTH:i:s") . $ext;
 }
 
 function path_from_hash($filename, $ext) {
-  global $STORE;
-  return $STORE . "/uploads/" . hash_file("md5", $filename) . $ext;
+  return STORE . "/uploads/" . hash_file("md5", $filename) . $ext;
 }
 
 function read_json($path, $default = []) {
