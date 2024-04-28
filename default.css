@@ -25,7 +25,7 @@ a {
 }
 
 a:hover {
-  opacity: 0.8;
+  text-decoration: underline;
 }
 
 /* Partially stolen from @csswizardry on Twitter (ahem, I meant X ofc) */
@@ -184,32 +184,32 @@ body {
     "footer footer";
 }
 
-header {
+body > header {
   grid-area: header;
+
+  & hgroup p {
+    opacity: .7;
+  }
 }
 
-header hgroup p {
-  opacity: .7;
-}
-
-main {
+body > main {
   grid-area: main;
   height: 100%;
 }
 
-aside {
+body > aside {
   grid-area: aside;
 }
 
-footer {
+body > footer {
   grid-area: footer;
   text-align: center;
   font-size: .85em;
   opacity: .85;
-}
 
-footer p {
-  margin: .3em;
+  & p {
+    margin: .3em;
+  }
 }
 
 nav ul {
@@ -220,9 +220,72 @@ nav ul {
   justify-content: flex-end;
   align-items: center;
   flex-wrap: wrap;
+
+  & li:not(:last-child)::after {
+    content:  "·";
+    margin: 0 .3em;
+  }
 }
 
-nav ul li:not(:last-child)::after {
-  content:  "·";
-  margin: 0 .3em;
+article {
+  display: grid;
+  align-items: end;
+  margin-left: .7em;
+  grid-template-columns: 65px 83px auto;
+  grid-template-areas:
+    "h-card dt title"
+    "nothing content content";
+
+  .h-card {
+    grid-area: h-card;
+    float: left;
+    
+    .p-name {
+      display: none;
+    }
+
+    .u-photo {
+      max-width: 65px;
+      margin-left: -0.7em;
+      margin-bottom: -40px;
+      border-radius: 6px;
+    }
+  }
+
+  time {
+    grid-area: dt;
+
+    a {
+      text-decoration: none;
+    }
+
+    &::after {
+      content:  "·";
+    }
+  }
+
+ h2 {
+    grid-area: title;
+    font-size: 1em;
+    font-weight: normal;
+    font-style: italic;
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  h2, time {
+    color: #555;
+  }
+
+  .e-content {
+    grid-area: content;
+    font-size: 1.15em;
+
+    p:first-child {
+      margin-top: 0;
+      padding-top: .3em;
+      border-top: 1px dotted #ccc;
+    }
+  }
 }
