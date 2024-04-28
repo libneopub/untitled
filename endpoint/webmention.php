@@ -40,9 +40,7 @@ if (stristr($source, $_POST['target'])) {
 
 header($_SERVER['SERVER_PROTOCOL'] . ' 202 Accepted');
 
-$uri = parse_url($target);
-$path = $uri['path'];
-
+$path = parse_url($target, PHP_URL_PATH);
 $path_pattern = '/^\/(\d{4})\/([a-zA-Z0-9]+)$/';
 
 if(preg_match($path_pattern, $path, $matches)) {
@@ -54,7 +52,9 @@ if(preg_match($path_pattern, $path, $matches)) {
   $url = \urls\post_url($year, $id);
 }
 
-\notifications\new_webmention($_POST['target'], $_POST['source']);
+if(WEBMENTION_NOTIFICATIONS) {
+  \notifications\new_webmention($_POST['target'], $_POST['source']);
+}
 
 // Redirect to target page, useful in case of sending 
 // a webmention via the form in the comment section.
