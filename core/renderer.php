@@ -63,38 +63,47 @@ function render_comment_section($post) {
 }
 
 function render_content($post) {
-  global $BASE;
+  switch($post['type']) {
+    case "photo":
+      render_photo($post);
+      break;
 
-  // Render a photo.
-  if($post['type'] == "photo") {
-    $parser = new Parsedown();
+    case "code": 
+      render_code($post);
+      break;
 
-    $url = $post['url'] ?? \urls\photo_url($post['path']);
-    $caption = $parser->text($post["caption"]);
-
-    ?>
-      <figure>
-        <img 
-          class="u-photo" 
-          src="<?= $url ?>" 
-          alt="<?= strip_tags($post["caption"]) ?>"
-        />
-        <figcaption><?= $caption ?></figcaption>
-      </figure> 
-    <?php
-  } 
-
-  // Render a code snippet
-  else if($post['type'] == "code") {
-    $code = file_get_contents($post['path']);
-    echo '<pre><code>' . htmlspecialchars($code) . '</code></pre>';
-  } 
-
-  // Render other content.
-  else {
-    $parser = new Parsedown();
-    $content = file_get_contents($post['path']);
-
-    echo $parser->text($content);
+    default:
+      render_text($post);
+      break;
   }
+}
+
+function render_photo($post) {
+  $parser = new Parsedown();
+
+  $url = $post['url'] ?? \urls\photo_url($post['path']);
+  $caption = $parser->text($post['caption']);
+
+  ?>
+    <figure>
+      <img 
+        class="u-photo" 
+        src="<?= $url ?>" 
+        alt="<?= strip_tags($caption) ?>"
+      />
+      <figcaption><?= $caption ?></figcaption>
+    </figure> 
+  <?php
+}
+
+function render_code($post) {
+  $code = file_get_contents($post['path']);
+  echo '<pre><code>' . htmlspecialchars($code) . '</code></pre>';
+}
+
+function render_text($post) {
+  $parser = new Parsedown();
+  $content = file_get_contents($post['path']);
+
+  echo $parser->text($content);
 }
