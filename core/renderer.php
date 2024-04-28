@@ -22,15 +22,36 @@ function render_message($kind, $message) {
 }
 
 function render_post($post) {
+  global $AUTHOR_NAME, $AUTHOR_PICTURE;
+  $timestamp = strtotime($post['published']);
+
   ?>
     <article class="h-entry">
       <?php if($post['title']) {
-        echo '<h1 class="p-name">' . $post['title'] . '</h1>';
+        echo '<h2 class="p-name">' . $post['title'] . '</h2>';
       } ?>
 
-      <section class="p-summary e-content">
+      <div class="p-summary e-content">
         <?php render_content($post) ?>
-      </section>
+      </div>
+
+      <time class="dt-published" datetime="<?= date("c", $timestamp) ?>">
+        <a class="u-url" href="<?= \urls\post_url($post) ?>">
+          <?= date("Y-m-d", $timestamp) ?>
+        </a>
+      </time>
+
+      <div class="p-author h-card">
+        <a class="u-url" href="<?= $CANONICAL ?>">
+          <img
+            class="u-photo"
+            src="<?= $AUTHOR_PICTURE ?>"
+            alt="<?= $AUTHOR_NAME ?>"
+            width="100"
+          >
+          <p class="p-name"><?= $AUTHOR_NAME ?></p>
+        </a>
+      </div>
     </article>
   <?php
 }
@@ -97,13 +118,13 @@ function render_photo($post) {
 }
 
 function render_code($post) {
-  $code = file_get_contents($post['path']);
+  $code = \store\upload_contents($post['path']);
   echo '<pre><code>' . htmlspecialchars($code) . '</code></pre>';
 }
 
 function render_text($post) {
   $parser = new Parsedown();
-  $content = file_get_contents($post['path']);
+  $content = \store\upload_contents($post['path']);
 
   echo $parser->text($content);
 }

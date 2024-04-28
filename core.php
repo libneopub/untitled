@@ -18,6 +18,9 @@ require_once __DIR__ . "/core/pingbacks.php";
 require_once __DIR__ . "/core/renderer.php";
 require_once __DIR__ . "/core/headers.php";
 
+// Vendorerd
+require_once __DIR__ . "/vendor/parsedown.php";
+
 // Method to debug the micropub endpoint. It crashes the 
 // endpoint and logs the request to log.json
 function debug_endpoint() 

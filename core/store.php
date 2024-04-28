@@ -7,7 +7,7 @@ function upload_text($content) {
   $path = path_from_datetime(".md");
   file_put_contents($path, $content);
 
-  return $path;
+  return basename($path);
 }
 
 function upload_photo($tmp_file) {
@@ -18,6 +18,11 @@ function upload_photo($tmp_file) {
   } else {
     return false;
   }
+}
+
+function upload_contents($path) {
+  global $STORE;
+  return file_get_contents("$STORE/uploads/$path");
 }
 
 function put_post($year, $post) {
@@ -102,7 +107,7 @@ function path_from_hash($filename, $ext) {
 
 function read_json($path, $default = []) {
   if($json = @file_get_contents($path)) {
-    return json_decode($json);
+    return json_decode($json, true);
   } else {
     return $default;
   }

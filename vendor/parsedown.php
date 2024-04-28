@@ -2,6 +2,8 @@
 // Parsedown <http://parsedown.org>
 // Written by Emanuil Rusev, MIT licensed.
 
+namespace renderer;
+
 // Vendored because I hate PHP package management.
 
 class Parsedown

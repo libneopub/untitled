@@ -11,7 +11,7 @@ require_once __DIR__ . "/../core.php";
 
 // Configuration requests don't need authentication
 if ($_GET["q"] === "config") {
-    header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");
+    header($_SERVER['SERVER_PROTOCOL'] . " 200 OK");
     echo json_encode(array("media-endpoint" => $MEDIA_ENDPOINT));
     exit;
 }
@@ -21,27 +21,27 @@ include __DIR__ . "/auth.php";
 // First, perform some checks to filter out requests that use features that
 // we (intentionally) don't support.
 
-if (isset($_POST["action"])) {
-    header($_SERVER["SERVER_PROTOCOL"] . " 418 I'm a teapot");
+if (isset($_POST['action'])) {
+    header($_SERVER['SERVER_PROTOCOL'] . " 418 I'm a teapot");
     echo "Deleting and restoring posts is unsupported.";
     exit;
 }
 
-if (isset($_POST["repost-of"]) || isset($_POST["like-of"]) || isset($_POST["bookmark-of"])) {
-    header($_SERVER["SERVER_PROTOCOL"] . " 418 I'm a teapot");
+if (isset($_POST['repost-of']) || isset($_POST['like-of']) || isset($_POST['bookmark-of'])) {
+    header($_SERVER['SERVER_PROTOCOL'] . " 418 I'm a teapot");
     echo "Reposts, likes, or bookmarks are unsupported, use a reply instead.";
     exit;
 }
 
-if (!empty($_FILES) && !isset($_FILES["photo"])) {
-    header($_SERVER["SERVER_PROTOCOL"] . " 418 I'm a teapot");
+if (!empty($_FILES) && !isset($_FILES['photo'])) {
+    header($_SERVER['SERVER_PROTOCOL'] . " 418 I'm a teapot");
     echo "Only 'photo' uploads are supported.";
     exit;
 }
 
 // Okey, request lookin' good, let's process it :D
 
-$title = $_POST["name"];
+$title = $_POST['name'];
 $content = $_POST['content'] ?? $_POST['summary'];
 $reply_to = $_POST['in-reply-to'];
 
@@ -50,17 +50,17 @@ $reply_to = $_POST['in-reply-to'];
 $published = $_POST['published'] ?? date("Y");
 $published = date("c", strtotime($published));
 
-if (isset($_FILES["photo"])) {
-    if (isset($_POST["photo"])) {
+if (isset($_FILES['photo'])) {
+    if (isset($_POST['photo'])) {
         echo "Warning: you provided both a photo upload and URL. The URL will be ignored.";
     }
 
-    $tmp_file = $_FILES["photo"]["tmp_name"];
+    $tmp_file = $_FILES['photo']['tmp_name'];
 
     // This checks if someone isn't maliciously trying
     // to overwrite /etc/passwd or something.
     if (!is_uploaded_file($tmp_file) || !getimagesize($tmp_file)) {
-        header($_SERVER["SERVER_PROTOCOL"] . " 400 Bad Request");
+        header($_SERVER['SERVER_PROTOCOL'] . " 400 Bad Request");
         echo "Bad photo upload. Try again.";
         exit;
     }
@@ -68,7 +68,7 @@ if (isset($_FILES["photo"])) {
     $path = \store\upload_photo($tmp_file);
 
     if (!$path) {
-        header($_SERVER["SERVER_PROTOCOL"] . " 500 Internal Server Error");
+        header($_SERVER['SERVER_PROTOCOL'] . " 500 Internal Server Error");
         echo "Something went wrong while saving your photo.";
         exit;
     }
@@ -82,13 +82,13 @@ if (isset($_FILES["photo"])) {
         "published" => $published
     );
 
-} else if (isset($_POST["photo"])) {
-    if (is_array($_POST["photo"])) {
+} else if (isset($_POST['photo'])) {
+    if (is_array($_POST['photo'])) {
         echo "Warning: this endpoint only supports a single photo per post, other photos will be ignored.";
 
-        $url = $_POST["photo"][0];
+        $url = $_POST['photo'][0];
     } else {
-        $url = $_POST["photo"];
+        $url = $_POST['photo'];
     }
 
     $post = array(
@@ -102,13 +102,13 @@ if (isset($_FILES["photo"])) {
 
 } else {
     if (!$content) {
-        header($_SERVER["SERVER_PROTOCOL"] . " 400 Bad Request");
+        header($_SERVER['SERVER_PROTOCOL'] . " 400 Bad Request");
         echo "Missing 'content' or 'summary' value in post payload.";
         exit;
     }
 
     $path = \store\upload_text($content);
-    $type = $title ? "article" : "toot";
+    $type = empty($title) ? "toot" : "article";
 
     $post = array(
         "id" => uniqid(),

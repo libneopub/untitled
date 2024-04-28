@@ -8,6 +8,9 @@ $SITE_LANG = "en";
 $SITE_TITLE = "@Robijntje";
 $SITE_DESCRIPTION = "Verified (€15/year for the domain)";
 
+$AUTHOR_NAME = $SITE_TITLE;
+$AUTHOR_PICTURE = "/uploads/axcelott.jpg";
+
 $MICROPUB_ENDPOINT =  "$CANONICAL/endpoint/micropub";
 $MEDIA_ENDPOINT = "$CANONICAL/endpoint/media";
 $WEBMENTION_ENDPOINT = "$CANONICAL/endpoint/webmention";
