@@ -18,9 +18,29 @@ This project is very much an attempt at self-dogfooding.
 - [x] Receiving pingbacks
 - [x] RSS, Atom & JSON feeds
 - [x] Comment section
+- [ ] IndieAuth
 - [ ] ActivityPub
 - [ ] It works
 - [ ] CLI
+
+### CMS
+
+I'm building my own custom CMS to power this website engine. The CMS will be similar to early versions of Blogger, and support a bunch of things:
+
+- Asset management: uploading photos and videos via a simple GUI.
+- Editors for toots, articles, replies, code and photos.
+- Dashboard for moderating webmentions. I might also provide an option to send an email to the webmaster when a new webmention is received.
+- Basic statistics. Just recording which URLs get hit mosts by logging all requests. Should also show emoji reactions form the OpenHeart protocol.
+- [@mentions](https://roblog.nl/blog/mentions), allowing you to tag other webmasters.
+- Email subsriptions, based on my [Sub API](https://api.geheimesite.nl/sub).
+- RSS only posts, which won't be rendered on the homepage & post listings on the site.
+
+I'm also thinking about other things, but I've shelved them until I have a working site up-and-running:
+
+- Git integration? I could add an optional git module that would version-manage the data store. I'm not sure whether this is possible using PHP, but it would definitely be cool.
+- [#hashtags](https://personal-web.org). The difficulty is that some sort of central service is needed. I'm not sure how ActivityPub handles it, but might be interesting to look into when I build the ActivityPub functionality?
+- Access control? Only allowing certain subscribers to see some posts. This would work by giving each subscriber an unique token, which would be stored in a cookie and appended to the query params of the RSS feed.>
+- Drafts and previewing, maybe implemented using the same foundation as access control?
 
 ### CLI
 

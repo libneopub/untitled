@@ -15,7 +15,7 @@ html {
 }
 
 body {
-  font-size: clamp(0.9rem, 2vw, 1.2rem);
+  font-size: clamp(0.9rem, 2vw, 1rem);
   line-height: 1.5;
   font-family: serif;
 }
@@ -182,11 +182,14 @@ body {
     "header aside"
     "main main"
     "footer footer";
-  align-items: center;
 }
 
 header {
   grid-area: header;
+}
+
+header hgroup p {
+  opacity: .7;
 }
 
 main {
@@ -216,6 +219,10 @@ nav ul {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: .5em;
   flex-wrap: wrap;
+}
+
+nav ul li:not(:last-child)::after {
+  content:  "·";
+  margin: 0 .3em;
 }
