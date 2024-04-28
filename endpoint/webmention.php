@@ -27,14 +27,8 @@ if(!str_starts_with($target, $our_site) {
 
 // Validate whether the 'source' page actually contains a link to 'target'.
 
-ob_start();
-$ch = curl_init($_POST['source']);
-curl_setopt($ch, CURLOPT_USERAGENT, CANONICAL);
-curl_setopt($ch, CURLOPT_HEADER, 0);
-$ok = curl_exec($ch);
-curl_close($ch);
-$source = ob_get_contents();
-ob_end_clean();
+$response = \http\get($_POST['source']);
+$source = $reponse['body'];
 
 if (stristr($source, $_POST['target'])) {
   header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');

@@ -2,7 +2,7 @@
 // Handles OAuth/IndieAuth authentication
 // for the micropub and media endpoints.
 
-$_HEADERS = array();
+$_HEADERS = [];
 foreach (getallheaders() as $name => $value) {
     $_HEADERS[$name] = $value;
 }
