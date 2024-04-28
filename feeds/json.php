@@ -17,9 +17,15 @@ foreach($posts as $post) {
     "id" => $post['id'],
     "url" => \urls\post_url($post),
     "title" => $post['title'],
-    "content_html" => \renderer\render_content($post),
+    "content_html" => render_to_str($post),
     "date_published" => $post['published'] . "Z"
   );
+}
+
+function render_to_str($post) {
+  ob_start();
+  \renderer\render_content($post);
+  return ob_get_clean();
 }
 
 echo json_encode(array(
