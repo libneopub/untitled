@@ -80,23 +80,23 @@ function list_mentions($year, $id) {
 // Helpers
 
 function feed_for_year($year) {
-  global $BASE;
-  return $BASE . "$year.json";
+  global $STORE;
+  return $STORE . "$year.json";
 }
 
 function feed_for_post($year, $id) {
-  global $BASE;
-  return $BASE . "mentions/$year/$id.json";
+  global $STORE;
+  return $STORE . "mentions/$year/$id.json";
 }
 
 function path_from_datetime($ext) {
-  global $BASE;
-  return $BASE . date("Y-m-dTH:i:s") . $ext;
+  global $STORE;
+  return $STORE . date("Y-m-dTH:i:s") . $ext;
 }
 
 function path_from_hash($filename, $ext) {
-  global $BASE;
-  return $BASE . hash_file("md5", $filename) . $ext;
+  global $STORE;
+  return $STORE . hash_file("md5", $filename) . $ext;
 }
 
 function ext($path) {

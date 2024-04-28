@@ -2,13 +2,9 @@
 // Core neopub APIs live here.
 
 $PUBB_VERSION = "0.1a";
-$BASE = __DIR__ . "/../data/";
+$STORE = __DIR__ . "/../data/";
 
-// Initialize data store if it doesn't exist yet
-if(!is_dir($BASE)) {
-    mkdir($BASE);
-}
-
+require_once __DIR__ . "/init.php";
 require_once __DIR__ . "/core/core.php";
 require_once __DIR__ . "/core/store.php";
 require_once __DIR__ . "/core/utils.php";
@@ -35,3 +31,10 @@ function debug_endpoint()
 
     exit;
 }
+
+// Enable error reporting for development
+// TODO(robin): turn this off before deploying!!
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
+ini_set("display_startup_errors", 1);
+
