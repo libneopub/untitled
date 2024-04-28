@@ -272,11 +272,12 @@ $year = date("Y"); // For loading the current stylesheet.
       <h1>Sign in</h1>
 
       <p>
-        You're logging into
-        <strong><?= htmlspecialchars($redirect_uri) ?></strong> 
-        (<code><?= htmlspecialchars($client_id) ?></code>)
+        You're logging in to
+        <a href="<?= htmlspecialchars($client_id) ?>">
+          <strong><?= htmlspecialchars($client_id) ?></strong>
+        </a>
       </p>
-   
+      
       <form action="" method="post">
 
         <?php if (strlen($scope) > 0) { ?>
@@ -303,7 +304,11 @@ $year = date("Y"); // For loading the current stylesheet.
         
         <input type="hidden" name="_csrf" value="<?php echo $csrf_token; ?>" />
 
-        <p>Logging in as <strong><?= htmlspecialchars(parse_url(MAIN_SITE, PHP_URL_HOST)); ?></strong></p>
+        <p>
+          Logging in as <a href="<?= MAIN_SITE ?>">
+            <strong><?= parse_url(MAIN_SITE, PHP_URL_HOST); ?></strong>
+          </a>
+        </p>
 
         <label>
             Password<br />
@@ -311,6 +316,8 @@ $year = date("Y"); // For loading the current stylesheet.
         </label>
 
         <input type="submit" name="submit" value="Sign in" />
+        
+        <p><small>After loggin in, you will be redirected to <?= htmlspecialchars($redirect_uri) ?></small></p>
       </form>
   </body>
 </html>
