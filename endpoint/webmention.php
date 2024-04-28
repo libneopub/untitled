@@ -55,6 +55,9 @@ if(preg_match($path_pattern, $path, $matches)) {
   $id = $matches[2];
 
   \store\put_mention($year, $id, $source);
+
+  $url = \urls\post_url($year, $id);
+  \notifications\new_webmention($url, $source);
 }
 
 header('Link: ' . $target);

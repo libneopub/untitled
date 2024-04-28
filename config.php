@@ -15,6 +15,11 @@ $WEBMENTION_ENDPOINT = "$CANONICAL/endpoint/webmention";
 // Disabled, see https://1mb.club/blog/https-redirects/
 $FORCE_HTTPS = false;
 
+// Notification settings
+$PUBLIC_EMAIL = "noreply@example.com";
+$WEBMASTER_EMAIL = "you@example.com";
+$WEBMENTION_NOTIFICATIONS = true;
+
 // I can't be bothered to actually implement pingback. Sowwy!
 $PINGBACK_ENDPOINT = "https://webmention.io/webmention?forward=$WEBMENTION_ENDPOINT";
 
