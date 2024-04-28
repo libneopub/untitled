@@ -38,12 +38,7 @@ function get_post($year, $id) {
 
 function list_posts($year) {
   $feed = feed_for_year($year);
-  
-  if($posts_json = file_get_contents($feed)) {
-    return json_decode($posts_json);
-  } else {
-    return [];
-  }
+  return read_json_file($feed);
 }
 
 function list_posts_by_type($year, $type) {
@@ -72,31 +67,37 @@ function put_mention($year, $id, $source) {
 
 function list_mentions($year, $id) {
   $feed = feed_for_post($year, $id);
-  $mentions_json = file_get_contents($feed);
-
-  return json_decode($mentions_json);
+  return read_json_file($feed);
 }
 
 // Helpers
 
 function feed_for_year($year) {
   global $STORE;
-  return $STORE . "$year.json";
+  return $STORE . "/posts/$year.json";
 }
 
 function feed_for_post($year, $id) {
   global $STORE;
-  return $STORE . "mentions/$year/$id.json";
+  return $STORE . "/mentions/$year/$id.json";
 }
 
 function path_from_datetime($ext) {
   global $STORE;
-  return $STORE . date("Y-m-dTH:i:s") . $ext;
+  return $STORE . "/uploads/" . date("Y-m-dTH:i:s") . $ext;
 }
 
 function path_from_hash($filename, $ext) {
   global $STORE;
-  return $STORE . hash_file("md5", $filename) . $ext;
+  return $STORE . "/uploads/" . hash_file("md5", $filename) . $ext;
+}
+
+function read_json_file($path, $default = []) {
+  if(file_exists($path) && ($json = file_get_contents($path))) {
+    return json_decode($json);
+  } else {
+    return $default;
+  }
 }
 
 function ext($path) {
