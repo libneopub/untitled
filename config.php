@@ -12,6 +12,9 @@ $MICROPUB_ENDPOINT =  "$CANONICAL/endpoint/micropub";
 $MEDIA_ENDPOINT = "$CANONICAL/endpoint/media";
 $WEBMENTION_ENDPOINT = "$CANONICAL/endpoint/webmention";
 
+// Disabled, see https://1mb.club/blog/https-redirects/
+$FORCE_HTTPS = false;
+
 // I can't be bothered to actually implement pingback. Sowwy!
 $PINGBACK_ENDPOINT = "https://webmention.io/webmention?forward=$WEBMENTION_ENDPOINT";
 

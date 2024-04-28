@@ -14,6 +14,11 @@ $page_types = array(
 );
 
 switch(true) {
+  case !$https && $FORCE_HTTPS:
+    header($_SERVER['SERVER_PROTOCOL'] . " 301 Moved Permanently");
+    header("Location: https://$HOST" . $_SERVER['REQUEST_URI']);
+    exit;
+  
   case $path === "/":
     header($_SERVER["SERVER_PROTOCOL"] . " 302 Found");
     header("Location: $CANONICAL/" . date("Y"));
@@ -77,11 +82,7 @@ if($not_found) {
             
             break;
 
-          case isset($posts) && count($posts) === 0:
-            \renderer\render_info("Nothing here. (anymore?)");
-            break;
-
-          case isset($posts):
+          case isset($posts) && count($posts) > 0:
             foreach($posts as $post) {
               \renderer\render_post($post);
             }
@@ -90,6 +91,10 @@ if($not_found) {
 
           case $not_found:
             include "partials/404.php";
+            break;
+
+          default:
+            \renderer\render_info("Nothing here. (anymore?)");
             break;
         }
         
