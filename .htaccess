@@ -32,6 +32,11 @@ LimitRequestBody 102400
 	RewriteCond %{REQUEST_FILENAME} \.php$ [NC]
 	RewriteRule ^ - [F]
 
+	# Feeds
+	RewriteRule ^rss\.xml$ /feed/rss.php [L]
+	RewriteRule ^atom\.xml$ /feed/atom.php [L]
+	RewriteRule ^feed\.json$ /feed/json.php [L]
+
 	# PHP-based routing (yippie!!)
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d

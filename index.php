@@ -31,6 +31,11 @@ switch(true) {
     # in production this will be handled by Apache directly.
     return false;
 
+  # Serve RSS feeds. Again, only in development.
+  case is_builtin() && route('@/rss.xml$@'): include __DIR__ . "/feeds/rss.php"; exit;
+  case is_builtin() && route('@/atom.xml$@'): include __DIR__ . "/feeds/atom.php"; exit;
+  case is_builtin() && route('@/feed.json$@'): include __DIR__ . "/feeds/json.php"; exit;
+
   case route('@/(\d{4})$@'):
     $year = $params[1];
     $posts = \store\list_posts($year);
