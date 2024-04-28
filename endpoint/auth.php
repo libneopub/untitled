@@ -39,10 +39,10 @@ if (!isset($values['scope'])) {
     exit;
 }
 
-normalize_url($values['me']);
-normalize_url($site_domain);
+$their_site = normalize_url($values['me']);
+$our_site = normalize_url($site_domain);
 
-if ($values['me'] != $site_domain) {
+if ($their_site !== $our_site) {
     header($_SERVER['SERVER_PROTOCOL'] . " 403 Forbidden");
     echo "Mismatching 'me' value in authentication token.";
     
