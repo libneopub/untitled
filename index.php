@@ -62,6 +62,8 @@ switch(true) {
 
 if($not_found) {
   header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
+} else {
+  \stats\record_view($path);
 }
 
 ?>

@@ -15,9 +15,10 @@ if(!is_dir($STORE)) {
   mkdir("$STORE/mentions");
   mkdir("$STORE/styles");
   mkdir("$STORE/uploads");
+  mkdir("$STORE/stats");
 
-  symlink("$STORE/styles", __DIR__ . "/styles");
-  symlink("$STORE/uploads", __DIR__ . "/uploads");
+  @symlink("$STORE/styles", __DIR__ . "/styles");
+  @symlink("$STORE/uploads", __DIR__ . "/uploads");
 }
 
 // Prevent mixed-content warnings

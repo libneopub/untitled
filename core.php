@@ -11,6 +11,7 @@ require_once __DIR__ . "/core/utils.php";
 require_once __DIR__ . "/core/http.php";
 require_once __DIR__ . "/core/dates.php";
 require_once __DIR__ . "/core/urls.php";
+require_once __DIR__ . "/core/stats.php";
 require_once __DIR__ . "/core/notifications.php";
 require_once __DIR__ . "/core/webmentions.php";
 require_once __DIR__ . "/core/pingbacks.php";
