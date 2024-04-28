@@ -16,16 +16,21 @@ LimitRequestBody 102400
 	RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
 	RewriteRule ^ %{REQUEST_SCHEME}://%1%{REQUEST_URI} [R=307,L]
 
-	# Force https (disabled, see 1mb.club)
-	#RewriteCond %{HTTPS} off 
-	#RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
-
 	# Block access to all hidden files and directories except for the
 	# visible content from within the `/.well-known/` hidden directory.
 	RewriteCond %{REQUEST_URI} "!(^|/)\.well-known/([^./]+./?)+$" [NC]
 	RewriteCond %{SCRIPT_FILENAME} -d [OR]
 	RewriteCond %{SCRIPT_FILENAME} -f
 	RewriteRule "(^|/)\." - [F]
+
+	# Fancy URLs (without .php suffix) for endpoints.
+	RewriteCond %{REQUEST_URI} ^/endpoint/(.+)$
+	RewriteCond %{DOCUMENT_ROOT}/endpoint/%1.php -f
+	RewriteRule ^(.+)$ /endpoint/$1.php [L]
+
+	# Disable direct for all other PHP files.
+	RewriteCond %{REQUEST_FILENAME} \.php$ [NC]
+	RewriteRule ^ - [F]
 
 	# PHP-based routing (yippie!!)
 	RewriteCond %{REQUEST_FILENAME} !-f
