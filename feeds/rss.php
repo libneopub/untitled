@@ -6,7 +6,7 @@ require_once __DIR__ . "/../core.php";
 
 include __DIR__ . "/caching.php";
 
-header("Content-Type: application/atom+rss; charset=UTF-8");
+header("Content-Type: application/rss+xml; charset=UTF-8");
 echo '<?xml version="1.0" encoding="utf-8" standalone="yes"?>';
 
 ?>
@@ -26,7 +26,7 @@ echo '<?xml version="1.0" encoding="utf-8" standalone="yes"?>';
     <generator>Pubb v<?= PUBB_VERSION ?></generator>
     <atom:link rel="self" href="<?= CANONICAL ?>/rss.xml" type="application/rss+xml" />
 
-    <?php if(isset(AUTHOR_NAME) && isset(AUTHOR_EMAIL)) {
+    <?php if(defined(AUTHOR_NAME) && defined(AUTHOR_EMAIL)) {
       echo "<managingEditor>AUTHOR_EMAIL (AUTHOR_NAME)</managingEditor>";
       echo "<webMaster>AUTHOR_EMAIL (AUTHOR_NAME)</webMaster>";
     } ?>
