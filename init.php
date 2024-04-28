@@ -6,3 +6,8 @@
 if(!is_dir($BASE)) {
   mkdir($BASE);
 }
+
+// Prevent mixed-content warnings
+if($FORCE_HTTPS) {
+  replace_prefix($CANONICAL, "http://", "https://")
+}
