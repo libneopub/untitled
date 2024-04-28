@@ -22,7 +22,7 @@ function render_message($kind, $message) {
 }
 
 function render_post($post) {
-  global $AUTHOR_NAME, $AUTHOR_PICTURE;
+  global $CANONICAL, $AUTHOR_NAME, $AUTHOR_PICTURE;
   $timestamp = strtotime($post['published']);
 
   ?>
