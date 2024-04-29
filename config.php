@@ -1,34 +1,69 @@
 <?php
 
-define('HOST', "localhost:4000");
-define('CANONICAL', "http://" . HOST); // OMIT THE TRAILING SLASH
-define('MAIN_SITE', CANONICAL); // Also the site used for logging in via IndieAuth.
+define('PUBB_VERSION', "0.1a");
+define('STORE', __DIR__ . "/data");
 
-define('SITE_LANG', "en");
-define('SITE_TITLE', "@Robijntje");
-define('SITE_DESCRIPTION', "Verified (€15/year for the domain)");
+if($json = @file_get_contents(STORE . "/config.json")) {
+  foreach(decode_json($json) as $key -> $value) {
+    define(normalize_key($key), $value);
+  }
+} else {
+  die("Failed to read config file!");
+}
 
-define('AUTHOR_NAME', SITE_TITLE);
-define('AUTHOR_EMAIL', "you@example.com");
-define('AUTHOR_PICTURE', "/uploads/axcelott.jpg");
+required('host');
+required('site.title');
+required('site.description');
 
-define('FORCE_HTTPS', false); // Disabled by default, see https://1mb.club/blog/https-redirects/
+// Optional
 
-define('PUBLIC_EMAIL', "noreply@example.com");
-define('WEBMASTER_EMAIL', "you@example.com");
-define('WEBMENTION_NOTIFICATIONS', true);
+// author.name
+// author.email
+// author.picture
+// notifications.admin
 
-define('ENCRYPTION_KEY', '317f48e381d6eed8765a0418723ad64f6ac6de528433d2d758ef39750557f6e9');
-define('PASSWORD_HASH', 'f5ac0102a91979ded2570f85804d854c');
+// TODO(robin): also make description optional
 
-define('MICROPUB_ENDPOINT', CANONICAL . "/endpoint/micropub");
-define('MEDIA_ENDPOINT', CANONICAL . "/endpoint/media");
-define('WEBMENTION_ENDPOINT', CANONICAL . "/endpoint/webmention");
-define('AUTH_ENDPOINT', CANONICAL . "/endpoint/auth");
+// Required, with defaults
+
+add_default('force-https', false);
+add_default('canonical', (FORCE_HTTPS ? "https" : "http") . "://" . HOST);
+
+add_default('site.lang', "en");
+add_default('author.main-site', CANONICAL);
+add_default('notifications.sender', "noreply@" . HOST);
+add_default('notifications.webmention', true);
+
+add_default('micropub-endpoint', CANONICAL . "/endpoint/micropub");
+add_default('media-endpoint', CANONICAL . "/endpoint/media");
+add_default('webmention-endpoint', CANONICAL . "/endpoint/webmention");
+add_default('auth-endpoint', CANONICAL . "/endpoint/auth");
 
 // I can't be bothered to actually implement pingback. Sowwy!
-define('PINGBACK_ENDPOINT', "https://webmention.io/webmention?forward=" . WEBMENTION_ENDPOINT);
+add_default('pingback-endpoint', "https://webmention.io/webmention?forward=" . WEBMENTION_ENDPOINT);
 
-// TODO(robin): these services are external for now,
-// but later I'd like to write these endpoints myself :)
-define('TOKEN_ENDPOINT', "https://tokens.indieauth.com/token");
+// TODO(robin): Implement this myself :)
+add_default('token-endpoint', "https://tokens.indieauth.com/token");
+
+// Helpers
+
+function normalize_key($key) {
+  $key = str_replace("-", "_", $key);
+  $key = str_replace(".", "_", $key);
+
+  return strtoupper($key);
+}
+
+function add_default($key, $value) {
+  $key = normalize_key($key);
+  
+  if(!defined($key) {
+    define($key, $value);
+  }
+}
+
+function required($key) {
+  if(!defined(normalize_key($key))) {
+    die("Missing required key '$key' in config!");
+  }
+}

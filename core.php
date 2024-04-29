@@ -1,9 +1,6 @@
 <?php
 // Core neopub APIs live here.
 
-define('PUBB_VERSION', "0.1a");
-define('STORE', __DIR__ . "/data");
-
 require_once __DIR__ . "/init.php";
 require_once __DIR__ . "/core/core.php";
 require_once __DIR__ . "/core/store.php";

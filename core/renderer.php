@@ -38,17 +38,19 @@ function render_post($post) {
         </a>
       </time>
 
-      <div class="p-author h-card">
-        <a class="u-url" href="<?= CANONICAL ?>">
-          <img
-            class="u-photo"
-            src="<?= AUTHOR_PICTURE ?>"
-            alt="<?= AUTHOR_NAME ?>"
-            width="100"
-          >
-          <p class="p-name"><?= AUTHOR_NAME ?></p>
-        </a>
-      </div>
+      <?= if(defined(AUTHOR_NAME) && defined(AUTHOR_PICTURE)) { ?>
+        <div class="p-author h-card">
+          <a class="u-url" href="<?= CANONICAL ?>">
+            <img
+              class="u-photo"
+              src="<?= AUTHOR_PICTURE ?>"
+              alt="<?= AUTHOR_NAME ?>"
+              width="100"
+            >
+            <p class="p-name"><?= AUTHOR_NAME ?></p>
+          </a>
+        </div>
+      <?php } ?>
     </article>
   <?php
 }

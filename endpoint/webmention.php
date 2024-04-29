@@ -52,7 +52,7 @@ if(preg_match($path_pattern, $path, $matches)) {
   $url = \urls\post_url($year, $id);
 }
 
-if(WEBMENTION_NOTIFICATIONS) {
+if(NOTIFICATIONS_WEBMENTION) {
   \notifications\new_webmention($_POST['target'], $_POST['source']);
 }
 

@@ -1,0 +1,14 @@
+{
+	"host": "localhost:4000",
+	"site.lang": "en",
+	"site.title": "@JohnDoe",
+	"site.description": "Verified (€15/year for the domain)",
+	"author.name": "John Doe",
+	"author.email": "you@example.com",
+	"author.picture": "https://fastly.picsum.photos/id/621/200/200.jpg?hmac=nKMlm18QmBAMa_wHA70nsMBpYKk0pU0C832236i2oMM",
+	"force-https": false,
+	"notifications.admin": "you@example.com",
+	"notifications.webmention.enable": true,
+	"encryption_key": "317f48e381d6eed8765a0418723ad64f6ac6de528433d2d758ef39750557f6e9",
+	"hashed_password": "f5ac0102a91979ded2570f85804d854c"
+}

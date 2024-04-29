@@ -7,7 +7,7 @@
 require_once __DIR__ . "/../config.php";
 require_once __DIR__ . "/../core.php";
 
-if(!defined('CANONICAL') || !defined('MAIN_SITE') || !defined('ENCRYPTION_KEY') || !defined('HASHED_PASSWORD')) {
+if(!defined('ENCRYPTION_KEY') || !defined('HASHED_PASSWORD')) {
   header($_SERVER['SERVER_PROTOCOL'] . " 500 Internal Server Error");
   echo "One of the required configuration keys for operating the IndieAuth endpoint is unset. Aborting.";
   exit; 
@@ -36,10 +36,10 @@ function verify_signed_code($key, $message, $code) {
 }
 
 function verify_password($password) {
-  $user_host = parse_url(MAIN_SITE, PHP_URL_HOST);
+  $user_host = parse_url(AUTHOR_MAIN_SITE, PHP_URL_HOST);
   $hash = md5($user_host . $password . ENCRYPTION_KEY);
 
-  return hash_equals(PASSWORD_HASH, $hash);
+  return hash_equals(HASHED_PASSWORD, $hash);
 }
 
 function filter_input_regexp($type, $variable, $regexp, $flags = null) {
@@ -118,14 +118,14 @@ if ($code !== null) {
   if (!(is_string($code)
       && is_string($redirect_uri)
       && is_string($client_id)
-      && verify_signed_code(APP_KEY, MAIN_SITE . $redirect_uri . $client_id, $code))
+      && verify_signed_code(ENCRYPTION_KEY, AUTHOR_MAIN_SITE . $redirect_uri . $client_id, $code))
   ) {
     header($_SERVER['SERVER_PROTOCOL'] . " 400 Bad Request");
     echo "Verification failed: given code was invalid.";
     exit;
   }
 
-  $response = ["me" => MAIN_SITE)];
+  $response = ["me" => AUTHOR_MAIN_SITE)];
   $code_parts = explode(":", $code, 3);
 
   if ($code_parts[2] !== "") {
@@ -238,7 +238,7 @@ if($submitted_password !== null) {
     $scope = implode(' ', $scope);
   }
 
-  $code = create_signed_code(ENCRYPTION_KEY, MAIN_SITE . $redirect_uri . $client_id, 5 * 60, $scope);
+  $code = create_signed_code(ENCRYPTION_KEY, AUTHOR_MAIN_SITE . $redirect_uri . $client_id, 5 * 60, $scope);
 
   $final_uri = $redirect_uri;
   if (strpos($redirect_uri, '?') === false) $final_uri .= '?';
@@ -246,7 +246,7 @@ if($submitted_password !== null) {
 
   $parameters = [
     "code" => $code,
-    "me" => MAIN_SITE
+    "me" => AUTHOR_MAIN_SITE
   ];
 
   if ($state !== null) $parameters['state'] = $state;
@@ -310,8 +310,8 @@ $year = date("Y"); // For loading the current stylesheet.
         <input type="hidden" name="_csrf" value="<?php echo $csrf_token; ?>" />
 
         <p>
-          Logging in as <a href="<?= MAIN_SITE ?>">
-            <strong><?= parse_url(MAIN_SITE, PHP_URL_HOST); ?></strong>
+          Logging in as <a href="<?= AUTHOR_MAIN_SITE ?>">
+            <strong><?= parse_url(AUTHOR_MAIN_SITE, PHP_URL_HOST); ?></strong>
           </a>
         </p>
 
