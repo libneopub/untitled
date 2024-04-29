@@ -8,6 +8,10 @@ error_reporting(E_ALL);
 ini_set("display_errors", 1);
 ini_set("display_startup_errors", 1);
 
+if(!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 80000) {
+  die("The minimum required PHP version is 8.0. Please upgrade your PHP installation to continue.");
+}
+
 // Initialize data store if it doesn't exist yet
 if(!is_dir(STORE)) {
   mkdir(STORE);

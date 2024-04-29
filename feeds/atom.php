@@ -21,7 +21,7 @@ echo '<?xml version="1.0" encoding="utf-8" standalone="yes"?>';
   <author>
     <name><?= AUTHOR_NAME ?></name>
     <uri><?= CANONICAL ?></uri>
-    <?php if(defined(AUTHOR_EMAIL)) echo "<email>AUTHOR_EMAIL</email>"; ?>
+    <?php if(defined('AUTHOR_EMAIL')) echo "<email>AUTHOR_EMAIL</email>"; ?>
   </author>
 
   <generator uri="https://dupunkto.org/pubb" version="<?= PUBB_VERSION ?>">

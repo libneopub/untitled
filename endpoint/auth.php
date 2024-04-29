@@ -7,7 +7,7 @@
 require_once __DIR__ . "/../config.php";
 require_once __DIR__ . "/../core.php";
 
-if(!defined(CANONICAL) || !defined(MAIN_SITE) || !defined(ENCRYPTION_KEY) || !defined(HASHED_PASSWORD)) {
+if(!defined('CANONICAL') || !defined('MAIN_SITE') || !defined('ENCRYPTION_KEY') || !defined('HASHED_PASSWORD')) {
   header($_SERVER['SERVER_PROTOCOL'] . " 500 Internal Server Error");
   echo "One of the required configuration keys for operating the IndieAuth endpoint is unset. Aborting.";
   exit; 

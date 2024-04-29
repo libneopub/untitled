@@ -26,7 +26,7 @@ echo '<?xml version="1.0" encoding="utf-8" standalone="yes"?>';
     <generator>Pubb v<?= PUBB_VERSION ?></generator>
     <atom:link rel="self" href="<?= CANONICAL ?>/rss.xml" type="application/rss+xml" />
 
-    <?php if(defined(AUTHOR_NAME) && defined(AUTHOR_EMAIL)) {
+    <?php if(defined('AUTHOR_NAME') && defined('AUTHOR_EMAIL')) {
       echo "<managingEditor>AUTHOR_EMAIL (AUTHOR_NAME)</managingEditor>";
       echo "<webMaster>AUTHOR_EMAIL (AUTHOR_NAME)</webMaster>";
     } ?>
