@@ -16,7 +16,7 @@ if ($_GET["q"] === "config") {
     exit;
 }
 
-include __DIR__ . "/authenticate.php";
+require_once __DIR__ . "/../auth.php";
 
 // First, perform some checks to filter out requests that use features that
 // we (intentionally) don't support.

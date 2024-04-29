@@ -23,12 +23,15 @@ LimitRequestBody 102400
 	RewriteCond %{SCRIPT_FILENAME} -f
 	RewriteRule "(^|/)\." - [F]
 
+	# Block access to the data directory
+	RewriteRule ^data/?$ - [F,L]
+
 	# Fancy URLs (without .php suffix) for endpoints.
 	RewriteCond %{REQUEST_URI} ^/endpoint/(.+)$
 	RewriteCond %{DOCUMENT_ROOT}/endpoint/%1.php -f
 	RewriteRule ^(.+)$ /endpoint/$1.php [L]
 
-	# Disable direct for all other PHP files.
+	# Block direct access for all other PHP files.
 	RewriteCond %{REQUEST_FILENAME} \.php$ [NC]
 	RewriteRule ^ - [F]
 

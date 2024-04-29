@@ -53,6 +53,7 @@ function render_post($post) {
   <?php
 }
 
+// TODO(robin): Actually render comments, instead of just links.
 function render_comment_section($post) {
   ?>
     <aside>
