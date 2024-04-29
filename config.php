@@ -24,7 +24,7 @@ define('PASSWORD_HASH', 'f5ac0102a91979ded2570f85804d854c');
 define('MICROPUB_ENDPOINT', CANONICAL . "/endpoint/micropub");
 define('MEDIA_ENDPOINT', CANONICAL . "/endpoint/media");
 define('WEBMENTION_ENDPOINT', CANONICAL . "/endpoint/webmention");
-define('AUTH_ENDPOINT', CANONICAL . "/endpoint/authorization");
+define('AUTH_ENDPOINT', CANONICAL . "/endpoint/auth");
 
 // I can't be bothered to actually implement pingback. Sowwy!
 define('PINGBACK_ENDPOINT', "https://webmention.io/webmention?forward=" . WEBMENTION_ENDPOINT);

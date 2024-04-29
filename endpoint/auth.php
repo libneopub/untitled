@@ -271,35 +271,40 @@ $year = date("Y"); // For loading the current stylesheet.
     <main>
       <h1>Sign in</h1>
 
-      <p>
-        You're logging in to
-        <a href="<?= htmlspecialchars($client_id) ?>">
-          <strong><?= htmlspecialchars($client_id) ?></strong>
-        </a>
-      </p>
+      <?php if(normalize_url($client_id) !== CANONICAL) { ?>
+        <p>
+          You're logging in to
+          <a href="<?= htmlspecialchars($client_id) ?>">
+            <strong><?= htmlspecialchars($client_id) ?></strong>
+          </a>
+        </p>
+      <?php } ?>
       
       <form action="" method="post">
 
         <?php if (strlen($scope) > 0) { ?>
-          <p>It is requesting the following permissions. Uncheck any you do not wish to grant:</p>
+          <?php if(normalize_url($client_id) === CANONICAL) { ?>
+            <input type="hidden" name="scopes" value="<?= $scope ?>" />
+          <?php } else { ?>
+            <p>It is requesting the following permissions. Uncheck any you do not wish to grant:</p>
 
-          <fieldset>
-            <legend>Scopes</legend>
-            <?php foreach (explode(" ", $scope) as $n => $checkbox) { ?>
-              <div>
-                <input 
-                  id="scope_<?php echo $n; ?>" 
-                  type="checkbox" 
-                  name="scopes[]" 
-                  value="<?php echo htmlspecialchars($checkbox); ?>" 
-                  checked
-                >
-                <label for="scope_<?php echo $n; ?>">
-                  <?php echo $checkbox; ?>
-                </label>
-              </div>
+            <fieldset>
+              <legend>Scopes</legend>
+              <?php foreach (explode(" ", $scope) as $n => $checkbox) { ?>
+                <div>
+                  <input 
+                    id="scope_<?php echo $n; ?>" 
+                    type="checkbox" 
+                    name="scopes[]" 
+                    value="<?php echo htmlspecialchars($checkbox); ?>" 
+                    checked
+                  >
+                  <label for="scope_<?php echo $n; ?>">
+                    <?php echo $checkbox; ?>
+                  </label>
+                </div>
+              </fieldset>
             <?php } ?>
-          </fieldset>
         <?php } ?>
         
         <input type="hidden" name="_csrf" value="<?php echo $csrf_token; ?>" />
