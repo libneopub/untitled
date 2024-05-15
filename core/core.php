@@ -1,5 +1,5 @@
 <?php
-// Core neopub API.
+// Core Pubb API.
 // Mostly wrappers around the other namespaces in neopub core.
 
 namespace core;

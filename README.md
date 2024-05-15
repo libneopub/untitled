@@ -8,6 +8,7 @@ This project is very much an attempt at self-dogfooding.
 
 ## Features
 
+- [x] Single tenant
 - [x] Captioned images
 - [x] Short posts
 - [x] Captioned code (like gists)
@@ -67,6 +68,6 @@ images (automatically uploading to u.roblog.nl, with -n flag).
 
 ## Non-goals
 
-Tests. I get it, they're important for ensuring code quality and confidence in codebases in professional settings. But this is a side-project that I'm building in my spare time, for fun. Don't ruin that for me please.
+**Tests**. I get it, they're important for ensuring code quality and confidence in codebases in professional settings. But this is a side-project that I'm building in my spare time, for fun. Don't ruin that for me please.
 
-Bookmarks, crossposts, likes. I want to encourage conversation, collaboration and meaningful interaction. Mindlessly double tapping doesn't fit that vision.
+**Bookmarks, crossposts, likes**. I want to encourage conversation, collaboration and meaningful interaction. Mindlessly double tapping doesn't fit that vision.

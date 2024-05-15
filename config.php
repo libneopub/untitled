@@ -38,12 +38,11 @@ add_default('micropub-endpoint', CANONICAL . "/endpoint/micropub");
 add_default('media-endpoint', CANONICAL . "/endpoint/media");
 add_default('webmention-endpoint', CANONICAL . "/endpoint/webmention");
 add_default('auth-endpoint', CANONICAL . "/endpoint/auth");
+// TODO(robin): Implement this myself :)
+add_default('token-endpoint', "https://tokens.indieauth.com/token");
 
 // I can't be bothered to actually implement pingback. Sowwy!
 add_default('pingback-endpoint', "https://webmention.io/webmention?forward=" . WEBMENTION_ENDPOINT);
-
-// TODO(robin): Implement this myself :)
-add_default('token-endpoint', "https://tokens.indieauth.com/token");
 
 // Helpers
 
@@ -57,7 +56,7 @@ function normalize_key($key) {
 function add_default($key, $value) {
   $key = normalize_key($key);
   
-  if(!defined($key) {
+  if(!defined($key)) {
     define($key, $value);
   }
 }
