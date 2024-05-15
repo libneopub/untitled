@@ -38,7 +38,7 @@ function render_post($post) {
         </a>
       </time>
 
-      <?= if(defined(AUTHOR_NAME) && defined(AUTHOR_PICTURE)) { ?>
+      <?php if(defined(AUTHOR_NAME) && defined(AUTHOR_PICTURE)) { ?>
         <div class="p-author h-card">
           <a class="u-url" href="<?= CANONICAL ?>">
             <img

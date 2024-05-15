@@ -19,7 +19,7 @@ This project is very much an attempt at self-dogfooding.
 - [x] Receiving pingbacks
 - [x] RSS, Atom & JSON feeds
 - [x] Comment section
-- [ ] IndieAuth
+- [x] IndieAuth
 - [ ] ActivityPub
 - [ ] It works
 - [ ] CLI

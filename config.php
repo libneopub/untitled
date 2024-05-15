@@ -3,12 +3,12 @@
 define('PUBB_VERSION', "0.1a");
 define('STORE', __DIR__ . "/data");
 
-if($json = @file_get_contents(STORE . "/config.json")) {
-  foreach(decode_json($json) as $key -> $value) {
+if($json = @json_decode(file_get_contents(STORE . "/config.json"))) {
+  foreach($json as $key => $value) {
     define(normalize_key($key), $value);
   }
 } else {
-  die("Failed to read config file!");
+  die("Failed to read config file.");
 }
 
 required('host');
@@ -63,6 +63,6 @@ function add_default($key, $value) {
 
 function required($key) {
   if(!defined(normalize_key($key))) {
-    die("Missing required key '$key' in config!");
+    die("Missing required key '$key' in config.");
   }
 }
