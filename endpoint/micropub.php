@@ -16,7 +16,11 @@ require_once __DIR__ . "/../auth.php";
 // First, perform some checks to filter out requests that use features that
 // we (intentionally) don't support.
 
-if(isset($_POST['repost-of']) || isset($_POST['like-of']) || isset($_POST['bookmark-of'])) {
+if(
+  isset($_POST['repost-of']) || 
+  isset($_POST['like-of']) || 
+  isset($_POST['bookmark-of'])
+) {
   http_response_code(501);
   json_error("Reposts, likes, or bookmarks are unsupported, use a reply instead.");
   exit;

@@ -21,6 +21,10 @@ function normalize_url($url) {
   }
 }
 
+function remove_prefix($str, $prefix) {
+  return replace_prefix($str, $prefix, "");
+}
+
 function replace_prefix($str, $old, $new) {
   if(str_starts_with($str, $old)) {
     return $new . substr($str, strlen($old));

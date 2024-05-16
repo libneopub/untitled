@@ -36,6 +36,11 @@ switch(true) {
   case is_builtin() && route('@/atom.xml$@'): include __DIR__ . "/feeds/atom.php"; exit;
   case is_builtin() && route('@/feed.json$@'): include __DIR__ . "/feeds/json.php"; exit;
 
+  case route('@' . CMS . '.*$@'):
+    // Delegate to the pebble router.
+    include __DIR__ . "/cms/index.php";
+    exit;
+
   case route('@/(\d{4})$@'):
     $year = $params[1];
     $posts = \store\list_posts($year);

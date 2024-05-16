@@ -2,6 +2,7 @@
 
 define('PUBB_VERSION', "0.1a");
 define('STORE', __DIR__ . "/data");
+define('CMS', '/cms');
 
 if($json = @json_decode(file_get_contents(STORE . "/config.json"))) {
   foreach($json as $key => $value) {
