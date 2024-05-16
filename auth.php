@@ -3,20 +3,20 @@
 // for the micropub and media endpoints.
 
 $_HEADERS = [];
-foreach (getallheaders() as $name => $value) {
+foreach(getallheaders() as $name => $value) {
     $_HEADERS[$name] = $value;
 }
 
-if (!isset($_HEADERS['Authorization']) && !isset($_POST['access_token'])) {
-    header($_SERVER['SERVER_PROTOCOL'] . " 401 Unauthorized");
+if(!isset($_HEADERS['Authorization']) && !isset($_POST['access_token'])) {
+    http_response_code(401);
     echo "Missing 'Authorization' header.";
     echo "Missing 'access_token' value.";
     
     echo "Please provide an access token.";
     exit;
 }
-if (!isset($_POST["h"])) {
-    header($_SERVER['SERVER_PROTOCOL'] . " 400 Bad Request");
+if(!isset($_POST["h"])) {
+    http_response_code(400);
     echo "Missing 'h' value.";
     exit;
 }
@@ -28,13 +28,13 @@ $response = \http\get(TOKEN_ENDPOINT, [
 
 parse_str($response['body'], $values);
 
-if (!isset($values['me'])) {
-    header($_SERVER['SERVER_PROTOCOL'] . " 400 Bad Request");
+if(!isset($values['me'])) {
+    http_response_code(400);
     echo "Missing 'me' value in authentication token.";
     exit;
 }
-if (!isset($values['scope'])) {
-    header($_SERVER['SERVER_PROTOCOL'] . " 400 Bad Request");
+if(!isset($values['scope'])) {
+    http_response_code(400);
     echo "Missing 'scope' value in authentication token.";
     exit;
 }
@@ -42,8 +42,8 @@ if (!isset($values['scope'])) {
 $their_site = normalize_url($values['me']);
 $our_site = normalize_url($site_domain);
 
-if ($their_site !== $our_site) {
-    header($_SERVER['SERVER_PROTOCOL'] . " 403 Forbidden");
+if($their_site !== $our_site) {
+    http_response_code(403);
     echo "Mismatching 'me' value in authentication token.";
     
     echo "Expected: " . strtolower($values['me']);
@@ -51,8 +51,8 @@ if ($their_site !== $our_site) {
     exit;
 }
 
-if (!stristr($values['scope'], "create")) {
-    header($_SERVER['SERVER_PROTOCOL'] . " 403 Forbidden");
+if(!stristr($values['scope'], "create")) {
+    http_response_code(403);
     echo "Missing 'create' value in 'scope'.";
     exit;
 }

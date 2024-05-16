@@ -1,6 +1,10 @@
 <?php
 // Various utility functions.
 
+function json_error($message) {
+  echo json_encode(["error" => $message]);
+}
+
 function is_whitespace($c) {
   return in_array($c, array(" ", "\t", "\n", "\r", "\0", "\x0B"));
 }
@@ -9,7 +13,7 @@ function normalize_url($url) {
   $url = replace_prefix($url, "http://", "https://");
   $url = strtolower($url);
   
-  if (!str_ends_with($str, "/")) {
+  if(!str_ends_with($str, "/")) {
     return $url .= "/";
   } else {
     return $url;

@@ -8,7 +8,7 @@ require_once __DIR__ . "/../config.php";
 require_once __DIR__ . "/../core.php";
 
 if(!defined('ENCRYPTION_KEY') || !defined('HASHED_PASSWORD')) {
-  header($_SERVER['SERVER_PROTOCOL'] . " 500 Internal Server Error");
+  http_response_code(500);
   echo "One of the required configuration keys for operating the IndieAuth endpoint is unset. Aborting.";
   exit; 
 }
@@ -23,11 +23,11 @@ function create_signed_code($key, $message, $ttl = 31536000, $appended_data = ""
 
 function verify_signed_code($key, $message, $code) {
   $code_parts = explode(":", $code, 3);
-  if (count($code_parts) !== 3) {
+  if(count($code_parts) !== 3) {
       return false;
   }
   $expires = hexdec($code_parts[0]);
-  if (time() > $expires) {
+  if(time() > $expires) {
       return false;
   }
   $body = $message . $expires . base64_url_decode($code_parts[2]);
@@ -44,7 +44,7 @@ function verify_password($password) {
 
 function filter_input_regexp($type, $variable, $regexp, $flags = null) {
   $options = ['options' => ['regexp' => $regexp]];
-  if ($flags !== null) $options['flags'] = $flags;
+  if($flags !== null) $options['flags'] = $flags;
     
   return filter_input(
       $type,
@@ -71,14 +71,16 @@ function get_q_value($mime, $accept) {
   $out = preg_match_all($regex, $accept, $matches);
   $types = array_combine($matches[1], $matches[2]);
     
-  match(true) {
-    array_key_exists($mime, $types) => $q = $types[$mime];
-    array_key_exists($full_type, $types) => $q = $types[$full_type];
-    array_key_exists('*/*', $types) => $q = $types['*/*'];
-    default => return 0;
-  }
-    
-  return $q === '' ? 1 : floatval($q);
+  $q = match(true) {
+    array_key_exists($mime, $types) => $types[$mime],
+    array_key_exists($full_type, $types) => $types[$full_type],
+    array_key_exists('*/*', $types) => $types['*/*'],
+    default => null
+  };
+
+  if($q === null) return 0;
+  if($q === "") return 1;
+  else return floatval($q);
 }
 
 // URL safe base64 encoding per https://tools.ietf.org/html/rfc7515#appendix-C
@@ -92,7 +94,7 @@ function base64_url_encode($string) {
 function base64_url_decode($string) {
   $string = strtr($string, '-_', '+/');
   $padding = strlen($string) % 4;
-  if ($padding !== 0) {
+  if($padding !== 0) {
     $string .= str_repeat('=', 4 - $padding);
   }
   $string = base64_decode($string);
@@ -110,42 +112,42 @@ function base64_url_decode($string) {
 
 $code = filter_input_regexp(INPUT_POST, "code", '@^[0-9a-f]+:[0-9a-f]{64}:@');
 
-if ($code !== null) {
+if($code !== null) {
   $redirect_uri = filter_input(INPUT_POST, "redirect_uri", FILTER_VALIDATE_URL);
   $client_id = filter_input(INPUT_POST, "client_id", FILTER_VALIDATE_URL);
 
   // Exit if there are errors in the client supplied data.
-  if (!(is_string($code)
+  if(!(is_string($code)
       && is_string($redirect_uri)
       && is_string($client_id)
       && verify_signed_code(ENCRYPTION_KEY, AUTHOR_MAIN_SITE . $redirect_uri . $client_id, $code))
   ) {
-    header($_SERVER['SERVER_PROTOCOL'] . " 400 Bad Request");
+    http_response_code(400);
     echo "Verification failed: given code was invalid.";
     exit;
   }
 
-  $response = ["me" => AUTHOR_MAIN_SITE)];
+  $response = ["me" => AUTHOR_MAIN_SITE];
   $code_parts = explode(":", $code, 3);
 
-  if ($code_parts[2] !== "") {
+  if($code_parts[2] !== "") {
       $response['scope'] = base64_url_decode($code_parts[2]);
   }
 
   // Check what kind of response the client wants.
   $accept_header = '*/*';
-  if (isset($_SERVER['HTTP_ACCEPT']) && strlen($_SERVER['HTTP_ACCEPT']) > 0) {
+  if(isset($_SERVER['HTTP_ACCEPT']) && strlen($_SERVER['HTTP_ACCEPT']) > 0) {
       $accept_header = $_SERVER['HTTP_ACCEPT'];
   }
 
   $json = get_q_value("application/json", $accept_header);
   $form = get_q_value("application/x-www-form-urlencoded", $accept_header);
 
-  if ($json === 0 && $form === 0) {    
-    header($_SERVER['SERVER_PROTOCOL'] . " 406 Not Acceptable");
+  if($json === 0 && $form === 0) {    
+    http_response_code(406);    
     echo "The client accepts neither JSON nor form-encoded responses.";
     exit;
-  } elseif ($json >= $form) {
+  } elseif($json >= $form) {
     header('Content-Type: application/json');
     echo json_encode($response);
     exit;
@@ -169,31 +171,31 @@ $response_type = filter_input_regexp(INPUT_GET, "response_type", '@^(id|code)?$@
 $scope = filter_input_regexp(INPUT_GET, "scope", '@^([\x21\x23-\x5B\x5D-\x7E]+( [\x21\x23-\x5B\x5D-\x7E]+)*)?$@');
 
 if(!is_string($client_id)) {
-  header($_SERVER['SERVER_PROTOCOL'] . " 400 Bad Request");
+  http_response_code(400);
   echo "The 'client_id' was either omitted or not a valid URL.";
   exit;
 }
 
-if(!is_string($redirect_uri)) [  
-  header($_SERVER['SERVER_PROTOCOL'] . " 400 Bad Request");
+if(!is_string($redirect_uri)) {
+  http_response_code(400);
   echo "The 'redirect_uri' was either omitted or not a valid URL.";
   exit;
-]
+}
 
 if($state === false) {
-  header($_SERVER['SERVER_PROTOCOL'] . " 400 Bad Request");
+  http_response_code(400);
   echo "The 'state' contains illegal characters.";
   exit;
 }
 
 if($response_type === false) {
-  header($_SERVER['SERVER_PROTOCOL'] . " 400 Bad Request");
+  http_response_code(400);
   echo "The 'response_type' must be either 'id' or 'code'.";
   exit;
 }
 
 if($scope === false) {
-  header($_SERVER['SERVER_PROTOCOL'] . " 400 Bad Request");
+  http_response_code(400);
   echo "The 'scope' contains illegal characters.";
   exit;
 }
@@ -210,26 +212,26 @@ $submitted_password = filter_input(INPUT_POST, "password", FILTER_UNSAFE_RAW);
 if($submitted_password !== null) {
   $csrf_token = filter_input(INPUT_POST, "_csrf", FILTER_UNSAFE_RAW);
 
-  if ($csrf_token === null || !verify_signed_code(ENCRYPTION_KEY, $client_id . $redirect_uri . $state, $csrf_token)) {
-    header($_SERVER['SERVER_PROTOCOL'] . " 400 Bad Request");
+  if($csrf_token === null || !verify_signed_code(ENCRYPTION_KEY, $client_id . $redirect_uri . $state, $csrf_token)) {
+    http_response_code(400);
     echo "The CSRF token was invalid. Usually this means you took too long to log in. Please try again.";
     exit;
   }
 
-  if (!verify_password($submitted_password)) {
+  if(!verify_password($submitted_password)) {
     syslog(LOG_CRIT, "IndieAuth: login failure from " . $_SERVER['REMOTE_ADDR'] . " to $me");
 
-    header($_SERVER['SERVER_PROTOCOL'] . " 403 Forbidden");
+    http_response_code(403);
     echo "The password was wrong.";
     exit;
   }
 
   $scope = filter_input_regexp(INPUT_POST, "scopes", '@^[\x21\x23-\x5B\x5D-\x7E]+$@', FILTER_REQUIRE_ARRAY);
 
-  if ($scope !== null) {
+  if($scope !== null) {
     // Exit if the scopes ended up with illegal characters or were not supplied as array.
-    if ($scope === false || in_array(false, $scope, true)) {
-      header($_SERVER['SERVER_PROTOCOL'] . " 400 Bad Request");
+    if($scope === false || in_array(false, $scope, true)) {
+      http_response_code(400);
       echo "The scopes provided contained illegal characters.";
       exit;
     }
@@ -241,7 +243,7 @@ if($submitted_password !== null) {
   $code = create_signed_code(ENCRYPTION_KEY, AUTHOR_MAIN_SITE . $redirect_uri . $client_id, 5 * 60, $scope);
 
   $final_uri = $redirect_uri;
-  if (strpos($redirect_uri, '?') === false) $final_uri .= '?';
+  if(strpos($redirect_uri, '?') === false) $final_uri .= '?';
   else $final_uri .= '&';
 
   $parameters = [
@@ -249,7 +251,7 @@ if($submitted_password !== null) {
     "me" => AUTHOR_MAIN_SITE
   ];
 
-  if ($state !== null) $parameters['state'] = $state;
+  if($state !== null) $parameters['state'] = $state;
 
   $final_uri .= http_build_query($parameters);
   header("Location: $final_uri", response_code: 302);
@@ -281,8 +283,7 @@ $year = date("Y"); // For loading the current stylesheet.
       <?php } ?>
       
       <form action="" method="post">
-
-        <?php if (strlen($scope) > 0) { ?>
+        <?php if(strlen($scope) > 0) { ?>
           <?php if(normalize_url($client_id) === CANONICAL) { ?>
             <input type="hidden" name="scopes" value="<?= $scope ?>" />
           <?php } else { ?>
@@ -290,24 +291,25 @@ $year = date("Y"); // For loading the current stylesheet.
 
             <fieldset>
               <legend>Scopes</legend>
-              <?php foreach (explode(" ", $scope) as $n => $checkbox) { ?>
+              <?php foreach(explode(" ", $scope) as $n => $checkbox) { ?>
                 <div>
                   <input 
-                    id="scope_<?php echo $n; ?>" 
+                    id="scope_<?= $n ?>" 
                     type="checkbox" 
                     name="scopes[]" 
-                    value="<?php echo htmlspecialchars($checkbox); ?>" 
+                    value="<?= htmlspecialchars($checkbox) ?>" 
                     checked
                   >
-                  <label for="scope_<?php echo $n; ?>">
-                    <?php echo $checkbox; ?>
+                  <label for="scope_<?= $n ?>">
+                    <?= $checkbox ?>
                   </label>
                 </div>
-              </fieldset>
-            <?php } ?>
+              <?php } ?>
+            </fieldset>
+          <?php } ?>
         <?php } ?>
         
-        <input type="hidden" name="_csrf" value="<?php echo $csrf_token; ?>" />
+        <input type="hidden" name="_csrf" value="<?= $csrf_token; ?>" />
 
         <p>
           Logging in as <a href="<?= AUTHOR_MAIN_SITE ?>">
@@ -322,7 +324,7 @@ $year = date("Y"); // For loading the current stylesheet.
 
         <input type="submit" name="submit" value="Sign in" />
         
-        <p><small>After loggin in, you will be redirected to <?= htmlspecialchars($redirect_uri) ?></small></p>
+        <p><small>After logging in, you will be redirected to <?= htmlspecialchars($redirect_uri) ?></small></p>
       </form>
   </body>
 </html>

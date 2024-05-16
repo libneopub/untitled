@@ -7,7 +7,7 @@
 $last_updated = \store\last_updated();
 
 $_HEADERS = [];
-foreach (getallheaders() as $name => $value) {
+foreach(getallheaders() as $name => $value) {
     $_HEADERS[$name] = $value;
 }
 
@@ -27,7 +27,7 @@ $stale = false;
 if(!equal("If-Modified-Since", $last_modified)) $stale = true;
 if(!equal("If-None-Match", $etag)) $stale = true;
 
-if (!$stale) {
+if(!$stale) {
   header($_SERVER["SERVER_PROTOCOL"] . " 304 Not Modified");
   exit;
 }

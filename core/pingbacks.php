@@ -6,7 +6,7 @@ namespace pinkbacks;
 function send_pingback($source_url, $target_url) {
   $endpoint = discover_endpoint($target_url);
     
-  if (!$endpoint) return false;
+  if(!$endpoint) return false;
 
   $payload = xmlrpc_encode_request("pingback.ping", array(
     $source_url, 
@@ -21,8 +21,8 @@ function send_pingback($source_url, $target_url) {
   $body = strtolower(preg_replace('/\s+/', "", $response['body']));
 
   // Check if request was successful
-  if ($response['status'] !== 200 || empty($body)) return false;
-  if (strpos($body, "<fault>") || !strpos($body, "<string>")) return false;
+  if($response['status'] !== 200 || empty($body)) return false;
+  if(strpos($body, "<fault>") || !strpos($body, "<string>")) return false;
 
   return $response['body'];
 }
@@ -51,7 +51,7 @@ function xmlrpc_encode_request($method, $params) {
   $xml .= '<methodCall>';
   $xml .= '<methodName>'.htmlspecialchars($method).'</methodName>';
   $xml .= '<params>';
-  foreach ($params as $param) {
+  foreach($params as $param) {
     $xml .= '<param><value><string>'.htmlspecialchars($param).'</string></value></param>';
   }
   $xml .= '</params></methodCall>';

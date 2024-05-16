@@ -17,12 +17,12 @@ $page_types = array(
 
 switch(true) {
   case !is_https() && FORCE_HTTPS:
-    header($_SERVER['SERVER_PROTOCOL'] . " 301 Moved Permanently");
+    http_response_code(301);
     header("Location: https://" . HOST . $_SERVER['REQUEST_URI']);
     exit;
   
   case $path === "/":
-    header($_SERVER["SERVER_PROTOCOL"] . " 302 Found");
+    http_response_code(302);
     header("Location: " . CANONICAL . "/" . date("Y"));
     exit;
 
@@ -66,7 +66,7 @@ switch(true) {
 }
 
 if($not_found) {
-  header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
+  http_response_code(404);
 } else {
   \stats\record_view($path);
 }

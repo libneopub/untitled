@@ -4,53 +4,67 @@
 require_once __DIR__ . "/../config.php";
 require_once __DIR__ . "/../core.php";
 
-if (!isset($_POST['source'])) {
-  header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+if(!isset($_POST['source'])) {
+  http_response_code(400);
   echo "Missing 'source' parameter.";
   exit;
 }
 
-if (!isset($_POST['target'])) {
-  header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+if(!isset($_POST['target'])) {
+  http_response_code(400);
   echo "Missing 'target' parameter.";
   exit;
 }
 
+// The 'source' URL has to be a valid HTTP-fetchable page.
+
+$source_scheme = parse_url($_POST['source'], PHP_URL_SCHEME);
+
+if(in_array($source_scheme, ["http", "https"])) {
+  http_response_code(400);
+  echo "The URL scheme for the source URL is invalid.";
+  exit;
+}
+
+// Make sure the 'target' page is actually on our site.
+
 $target = normalize_url($_POST['target']);
 $our_site = normalize_url(CANONICAL);
 
-if(!str_starts_with($target, $our_site) {
-  header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+if(!str_starts_with($target, $our_site)) {
+  http_response_code(400);
   echo "You can only send webmentions for URLs hosted on this site.";
   exit;
 }
 
-// Validate whether the 'source' page actually contains a link to 'target'.
+// Validate whether the 'target' page is a post page.
+
+$params = \urls\parse($target);
+
+if(!$params) {
+  http_response_code(404);
+  echo "The target URL (normalized: $target) does not accept webmentions.";
+  exit;
+}
+
+// Validate whether the 'source' page actually 
+// contains a link to 'target'.
 
 $response = \http\get($_POST['source']);
 $source = $reponse['body'];
 
-if (stristr($source, $_POST['target'])) {
-  header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request');
+if(stristr($source, $_POST['target'])) {
+  http_response_code(400);
   echo "Your page doesn't actually mention mine.";
   exit;
 }
 
 // Everything looks good (*yay!). Let's process the Webmention!
 
-header($_SERVER['SERVER_PROTOCOL'] . ' 202 Accepted');
+http_response_code(202);
 
-$path = parse_url($target, PHP_URL_PATH);
-$path_pattern = '/^\/(\d{4})\/([a-zA-Z0-9]+)$/';
-
-if(preg_match($path_pattern, $path, $matches)) {
-  $year = $matches[1];
-  $id = $matches[2];
-
-  \store\put_mention($year, $id, $_POST['source']);
-
-  $url = \urls\post_url($year, $id);
-}
+[$year, $id] = $params;
+\store\put_mention($year, $id, $_POST['source']);
 
 if(NOTIFICATIONS_WEBMENTION) {
   \notifications\new_webmention($_POST['target'], $_POST['source']);
