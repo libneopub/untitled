@@ -238,7 +238,8 @@ ul a {
 /* Forms */
 
 input,
-textarea {
+textarea,
+select {
   border: 1px solid #dedede;
   outline: none;
 }

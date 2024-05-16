@@ -67,6 +67,18 @@ function list_mentions($year, $id) {
   return read_json($feed);
 }
 
+function list_all_mentions($year) {
+  $posts = list_posts($year);
+  $mentions = [];
+
+  foreach($posts as $post) {
+    $for_post = list_mentions($year, $post['id']);
+    $mentions[] = [$post, $for_post];
+  }
+
+  return $mentions;
+}
+
 function put_view($year, $month, $url) {
   $feed = feed_for_month($year, $month);
   write_json($feed, $url);

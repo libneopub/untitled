@@ -14,6 +14,7 @@ require_once __DIR__ . "/core/webmentions.php";
 require_once __DIR__ . "/core/pingbacks.php";
 require_once __DIR__ . "/core/renderer.php";
 require_once __DIR__ . "/core/headers.php";
+require_once __DIR__ . "/core/langs.php";
 
 // Vendorerd
 require_once __DIR__ . "/vendor/parsedown.php";

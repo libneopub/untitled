@@ -76,8 +76,7 @@ if($not_found) {
   \stats\record_view($path);
 }
 
-?>
-<!DOCTYPE html>
+?><!DOCTYPE html>
 <html lang="<?= SITE_LANG ?>">
   <head>
     <?php include "partials/head.php" ?>
