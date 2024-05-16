@@ -74,11 +74,10 @@ if(isset($_FILES['photo'])) {
   }
 
   $path = \store\upload_text($content);
-  $type = empty($title) ? "toot" : "article";
 
   $post = array(
     "id" => uniqid(),
-    "type" => $type,
+    "type" => "toot",
     "title" => $title,
     "path" => $path,
     "reply-to" => $reply_to,
