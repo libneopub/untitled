@@ -317,10 +317,12 @@ $year = date("Y"); // For loading the current stylesheet.
           </a>
         </p>
 
-        <label>
-            Password<br />
-            <input type="password" name="password" id="password">
-        </label>
+        <p>
+          <label>
+              Password<br />
+              <input type="password" name="password" id="password">
+          </label>
+        </p>
 
         <input type="submit" name="submit" value="Sign in" />
         

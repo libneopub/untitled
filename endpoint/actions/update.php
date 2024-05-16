@@ -3,13 +3,13 @@
 
 if(!isset($action)) {
   http_response_code(403);
-  echo "Nice try, hackerboy.";
+  json_error("Nice try, hackerboy.");
   exit;
 }
 
 if(!isset($_POST['url'])) {
   http_response_code(400);
-  echo "Missing 'url' parameter.";
+  json_error("Missing 'url' parameter.");
   exit;
 }
 
@@ -18,7 +18,7 @@ $params = \urls\parse($url);
 
 if(!$params) {
   http_response_code(404);
-  echo "The post you're trying to edit appears to be non-existant.";
+  json_error("The post you're trying to edit appears to be non-existant.");
   exit;
 }
 

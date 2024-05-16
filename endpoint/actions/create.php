@@ -3,7 +3,7 @@
 
 if(!isset($action)) {
   http_response_code(403);
-  echo "Nice try, hackerboy.";
+  json_error("Nice try, hackerboy.");
   exit;
 }
 
@@ -27,7 +27,7 @@ if(isset($_FILES['photo'])) {
   // to overwrite /etc/passwd or something.
   if(!is_uploaded_file($tmp_file) || !getimagesize($tmp_file)) {
     http_response_code(400);
-    echo "Bad photo upload. Try again.";
+    json_error("Bad photo upload. Try again.");
     exit;
   }
  
@@ -35,7 +35,7 @@ if(isset($_FILES['photo'])) {
 
   if(!$path) {
     http_response_code(500);
-    echo "Something went wrong while saving your photo.";
+    json_error("Something went wrong while saving your photo.");
     exit;
   }
 
@@ -50,7 +50,7 @@ if(isset($_FILES['photo'])) {
 
 } else if(isset($_POST['photo'])) {
   if(is_array($_POST['photo'])) {
-    echo "Warning: this endpoint only supports a single photo per post, other photos will be ignored.";
+    syslog(LOG_WARN, "Micropub: multiple photos provided, but the endpoint only supports a single photo per post, other photos will be ignored.");
 
     $url = $_POST['photo'][0];
   } else {
@@ -69,7 +69,7 @@ if(isset($_FILES['photo'])) {
 } else {
   if(!$content) {
     http_response_code(400);
-    echo "Missing 'content' or 'summary' value in post payload.";
+    json_error("Missing 'content' or 'summary' value in post payload.");
     exit;
   }
 
