@@ -26,16 +26,6 @@ switch(true) {
     header("Location: " . CANONICAL . "/" . date("Y"));
     exit;
 
-  case is_file(__DIR__ . $path) && is_builtin():
-    # Serve file as-is. Only applies to the development server,
-    # in production this will be handled by Apache directly.
-    return false;
-
-  # Serve RSS feeds. Again, only in development.
-  case is_builtin() && route('@/rss.xml$@'): include __DIR__ . "/feeds/rss.php"; exit;
-  case is_builtin() && route('@/atom.xml$@'): include __DIR__ . "/feeds/atom.php"; exit;
-  case is_builtin() && route('@/feed.json$@'): include __DIR__ . "/feeds/json.php"; exit;
-
   case route('@' . CMS . '.*$@'):
     // Delegate to the pebble router.
     include __DIR__ . "/cms/index.php";

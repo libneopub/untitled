@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 PORT=4000
-ENTRYPOINT="index.php"
+ENTRYPOINT="dev.php"
 
 serve() {
 	php -S 0.0.0.0:$PORT $ENTRYPOINT

@@ -3,8 +3,6 @@
   input[type="email"],
   select {
     width: 100%;
-    padding: 0.2em 0.4em;
-    font-size: 1em;
     margin-top: 0.4em;
     margin-bottom: 0.2em;
   }

@@ -1,10 +1,7 @@
 <?php
 // Authenticates the user using IndieAuth.
 
-session_start();
-
-define('CLIENT_ID', normalize_url(CANONICAL.CMS));
-define('REDIRECT_URI', CANONICAL.CMS . "/auth");
+session_start() or die("Failed to start session");
 
 // Proceed if the user is logged in.
 if(isset($_SESSION['access_token'])) {
@@ -16,13 +13,14 @@ if(isset($_SESSION['access_token'])) {
 elseif(!isset($_GET['code'])) {
     $_SESSION['state'] = random_string();
     $_SESSION['code_verifier'] = random_string(44);
-
+    
     $code_challenge = 
-        base64_url_encode(hash('sha256', $_SESSION['code_verifier']))
-
+        base64_url_encode(hash('sha256', $_SESSION['code_verifier']));
+        
+    $scopes = implode(" ", SUPPORTED_SCOPES);
     $query = http_build_query([
         "client_id" => CLIENT_ID,
-        "scope" => SUPPORTED_SCOPES,
+        "scope" => $scopes,
         "redirect_uri" => REDIRECT_URI,
         "state" => $_SESSION['state'],
         "code_challenge" => $code_challenge,

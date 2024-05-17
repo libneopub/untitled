@@ -4,14 +4,18 @@
 
 require_once __DIR__ . "/../config.php";
 require_once __DIR__ . "/../core.php";
-require_once __DIR__ . "/../router.php";
 
-// TODO(robin): (Indie)Auth!!
+include __DIR__ . "/auth.php";
 
 $path = trim(remove_prefix($path, CMS), "/");
 if($path === "") $path = "home";
 
+// This is dangerous. But the user has already been
+// authenticated at this point, so technically we can trust them.
+// So let's leave it in. I like living on the edge.
+
 $view = __DIR__ . "/views/$path.php";
+$action = __DIR__ . "/actions/$path.php";
 
 ?><!DOCTYPE html>
 <html lang="en">
@@ -23,11 +27,18 @@ $view = __DIR__ . "/views/$path.php";
     <?php include __DIR__ . "/partials/header.php" ?>
     <main>
       <?php
-        if(file_exists($view)) {
-          include $view;
-        } else {
-          http_response_code(404);
-          include __DIR__ . "/views/404.php";
+        switch(true) {
+          case file_exists($view):
+            include $view;
+            break;
+
+          case file_exists($action):
+            include $action;
+            break;
+
+          default:
+            include __DIR__ . "/views/404.php";
+            break;
         }
       ?>
     </main>

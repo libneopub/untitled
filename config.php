@@ -48,6 +48,9 @@ add_default('pingback-endpoint',
 
 define('CMS', '/cms');
 define('ISSUER', CANONICAL . "/");
+define('CLIENT_ID', ISSUER);
+define('REDIRECT_URI', CANONICAL.CMS . "/auth");
+
 define('SUPPORTED_SCOPES', [
   "create", 
   "update", 

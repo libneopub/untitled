@@ -27,5 +27,5 @@ if(!is_dir(STORE)) {
 
 // Error for mismatches between CANONICAL and FORCE_HTTPS
 if(FORCE_HTTPS && str_starts_with(CANONICAL, "http://")) {
-  die("Error: you've set FORCE_HTTPS to true, but the CANONICAL still contains http:// (instead of https://). This can potentially cause mixed content warnings, and messes with the canonical URL of your site!");
+  die("You've set FORCE_HTTPS to true, but the CANONICAL still contains http:// (instead of https://). This can potentially cause mixed content warnings, and messes with the canonical URL of your site!");
 }

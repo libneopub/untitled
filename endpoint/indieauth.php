@@ -268,7 +268,7 @@ $csrf_token =
     <main>
       <h1>Sign in</h1>
 
-      <?php if(normalize_url($client_id) !== CANONICAL) { ?>
+      <?php if($client_id !== CLIENT_ID) { ?>
         <p>
           You're logging in to
           <a href="<?= htmlspecialchars($client_id) ?>">
@@ -279,7 +279,7 @@ $csrf_token =
       
       <form action="" method="post">
         <?php if(strlen($scope) > 0) { ?>
-          <?php if(normalize_url($client_id) === CANONICAL) { ?>
+          <?php if($client_id === CLIENT_ID) { ?>
             <input type="hidden" name="scopes" value="<?= $scope ?>" />
           <?php } else { ?>
             <p>It is requesting the following permissions. Uncheck any you do not wish to grant:</p>
@@ -307,12 +307,6 @@ $csrf_token =
         <input type="hidden" name="_csrf" value="<?= $csrf_token; ?>" />
 
         <p>
-          Logging in as <a href="<?= AUTHOR_MAIN_SITE ?>">
-            <strong><?= parse_url(AUTHOR_MAIN_SITE, PHP_URL_HOST); ?></strong>
-          </a>
-        </p>
-
-        <p>
           <label>
               Password<br />
               <input type="password" name="password" id="password">
@@ -321,7 +315,11 @@ $csrf_token =
 
         <input type="submit" name="submit" value="Sign in" />
         
-        <p><small>After logging in, you will be redirected to <?= htmlspecialchars($redirect_uri) ?></small></p>
+        <?php if($client_id !== CLIENT_ID) { ?>
+          <p>
+            <small>After logging in, you will be redirected to <?= htmlspecialchars($redirect_uri) ?></small>
+          </p>
+        <?php } ?>
       </form>
   </body>
 </html>
