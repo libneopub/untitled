@@ -22,6 +22,7 @@ $stylesheet = file_exists(STORE . $yearly) ? $yearly : $general;
 <!-- Micropub, IndieAuth, Webmention & Pingback -->
 <link rel="micropub" href="<?= MICROPUB_ENDPOINT ?>">
 <link rel="media" href="<?= MEDIA_ENDPOINT ?>">
+<link rel="indieauth-metadata" href="<?= AUTH_ENDPOINT ?>?metadata">
 <link rel="authorization_endpoint" href="<?= AUTH_ENDPOINT ?>">
 <link rel="token_endpoint" href="<?= TOKEN_ENDPOINT ?>">
 <link rel="webmention" href="<?= WEBMENTION_ENDPOINT ?>">

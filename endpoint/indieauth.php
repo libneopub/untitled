@@ -7,6 +7,17 @@
 require_once __DIR__ . "/../config.php";
 require_once __DIR__ . "/../core.php";
 
+if(isset($_GET['metadata'])) {
+  json_data([
+    "issuer" => CANONICAL,
+    "authorization_endpoint" => AUTH_ENDPOINT,
+    "token_endpoint" => TOKEN_ENDPOINT,
+    "scopes_supported" => ["create", "delete", "media"],
+  ]);
+
+  exit;
+}
+
 if(!defined('ENCRYPTION_KEY') || !defined('HASHED_PASSWORD')) {
   http_response_code(500);
   echo "One of the required configuration keys for operating the IndieAuth endpoint is unset. Aborting.";
@@ -260,16 +271,17 @@ if($submitted_password !== null) {
   exit;
 }
 
-$csrf_token = create_signed_code(ENCRYPTION_KEY, $client_id . $redirect_uri . $state, 2 * 60);
-$year = date("Y"); // For loading the current stylesheet.
+$csrf_token = 
+  create_signed_code(ENCRYPTION_KEY, $client_id . $redirect_uri . $state, 2 * 60);
 
 ?><!DOCTYPE html>
 <html>
   <head>
-    <?php include __DIR__ . "/../partials/head.php" ?>
+    <?php include __DIR__ . "/../cms/partials/head.php" ?>
     <title>Sign in</title>
   </head>
   <body>
+    <?php include __DIR__ . "/../cms/partials/header.php" ?>
     <main>
       <h1>Sign in</h1>
 

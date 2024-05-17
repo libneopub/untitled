@@ -40,7 +40,7 @@ add_default('notifications.webmention', true);
 add_default('micropub-endpoint', CANONICAL . "/endpoint/micropub");
 add_default('media-endpoint', CANONICAL . "/endpoint/media");
 add_default('webmention-endpoint', CANONICAL . "/endpoint/webmention");
-add_default('auth-endpoint', CANONICAL . "/endpoint/auth");
+add_default('auth-endpoint', CANONICAL . "/endpoint/indieauth");
 
 // TODO(robin): Implement this myself :)
 add_default('token-endpoint', "https://tokens.indieauth.com/token");

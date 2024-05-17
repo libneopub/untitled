@@ -4,7 +4,8 @@
 
 require_once __DIR__ . "/../config.php";
 require_once __DIR__ . "/../core.php";
-require_once __DIR__ . "/../auth.php";
+
+include __DIR__ . "/inc/authenticate.php";
 
 if(empty($_FILES)) {
   http_response_code(400);

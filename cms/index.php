@@ -20,7 +20,7 @@ $view = __DIR__ . "/views/$path.php";
     <title>Pebble</title>
   </head>
   <body>
-  <?php include __DIR__ . "/partials/header.php" ?>
+    <?php include __DIR__ . "/partials/header.php" ?>
     <main>
       <?php
         if(file_exists($view)) {
