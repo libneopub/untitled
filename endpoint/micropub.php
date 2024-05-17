@@ -35,7 +35,7 @@ if(!empty($_FILES) && !isset($_FILES['photo'])) {
 // Okey, request lookin' good, let's process it :D
 
 $action = $_POST['action'] ?? "create";
-$allowed_actions = ["create", "update", "delete"];
+$allowed_actions = SUPPORTED_SCOPES;
 
 if(!in_array($action, $allowed_actions)) {
   http_response_code(501);

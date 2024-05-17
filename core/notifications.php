@@ -11,6 +11,8 @@ function new_webmention($source, $target) {
 }
 
 function send_to_webmaster($subject, $message) {
+    if(!defined('NOTIFICATIONS_ADMIN')) return;
+
     $message .= "\r\n\r\n";
     $message .= "This is an automated notification. ";
     $message .= "If you don't want to receive these anymore, you can disable them in the CMS".

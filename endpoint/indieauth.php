@@ -12,7 +12,7 @@ if(isset($_GET['metadata'])) {
     "issuer" => CANONICAL,
     "authorization_endpoint" => AUTH_ENDPOINT,
     "token_endpoint" => TOKEN_ENDPOINT,
-    "scopes_supported" => ["create", "delete", "media"],
+    "scopes_supported" => SUPPORTED_SCOPES,
   ]);
 
   exit;
