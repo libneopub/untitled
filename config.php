@@ -47,6 +47,7 @@ add_default('pingback-endpoint',
 // Constants
 
 define('CMS', '/cms');
+define('ISSUER', CANONICAL . "/");
 define('SUPPORTED_SCOPES', [
   "create", 
   "update", 

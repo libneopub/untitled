@@ -9,13 +9,13 @@ include __DIR__ . "/inc/authenticate.php";
 
 if(empty($_FILES)) {
   http_response_code(400);
-  json_error("Please provide media. This is a media endpoint after all.");
+  \resp\json_error("Please provide media. This is a media endpoint after all.");
   exit;
 }
 
 if(!isset($_FILES['photo'])) {
   http_response_code(501);
-  json_error("Only 'photo' uploads are supported.");
+  \resp\json_error("Only 'photo' uploads are supported.");
   exit;
 }
 
@@ -25,7 +25,7 @@ $tmp_file = $_FILES['photo']['tmp_name'];
 // to overwrite /etc/passwd or something.
 if(!is_uploaded_file($tmp_file) || !getimagesize($tmp_file)) {
     http_response_code(400);
-    json_error("Bad photo upload. Try again.");
+    \resp\json_error("Bad photo upload. Try again.");
     exit;
 }
 
@@ -33,7 +33,7 @@ $path = \store\upload_photo($tmp_file);
 
 if(!$path) {
   http_response_code(500);
-  json_error("Something went wrong while saving your photo.");
+  \resp\json_error("Something went wrong while saving your photo.");
   exit;
 }
 

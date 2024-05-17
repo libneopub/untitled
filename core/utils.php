@@ -1,18 +1,7 @@
 <?php
 // Various utility functions.
-
-function json_error($message) {
-  json_data(["error" => $message]);
-}
-
-function json_message($message) {
-  json_data(["message" => $message]);
-}
-
-function json_data($data) { 
-  header("Content-Type: application/json; charset=UTF-8");
-  echo json_encode($data);
-}
+// Basically a dumping-ground for function I'd wish were
+// just in the PHP standard library.
 
 function is_whitespace($c) {
   return in_array($c, array(" ", "\t", "\n", "\r", "\0", "\x0B"));
@@ -52,4 +41,29 @@ function flatten($separator, $array) {
   return array_map(function($key, $value) use ($separator) {
     return $key . $seperator . $value;
   }, $keys, $values);
+}
+
+function random_string($length = 12) {
+  $x = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  return substr(str_shuffle(str_repeat($x, ceil($length/strlen($x)))), 1, $length);
+}
+
+// URL safe base64 encoding per 
+// https://tools.ietf.org/html/rfc7515#appendix-C
+
+function base64_url_encode($string) {
+  $string = base64_encode($string);
+  $string = rtrim($string, '=');
+  $string = strtr($string, '+/', '-_');
+  return $string;
+}
+
+function base64_url_decode($string) {
+  $string = strtr($string, '-_', '+/');
+  $padding = strlen($string) % 4;
+  if($padding !== 0) {
+    $string .= str_repeat('=', 4 - $padding);
+  }
+  $string = base64_decode($string);
+  return $string;
 }

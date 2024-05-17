@@ -3,13 +3,13 @@
 
 if(!isset($action)) {
   http_response_code(403);
-  json_error("Nice try, hackerboy.");
+  \resp\json_error("Nice try, hackerboy.");
   exit;
 }
 
 if(!isset($_POST['url'])) {
   http_response_code(400);
-  json_error("Missing 'url' parameter.");
+  \resp\json_error("Missing 'url' parameter.");
   exit;
 }
 
@@ -18,7 +18,7 @@ $params = \urls\parse($url);
 
 if(!$params) {
   http_response_code(404);
-  json_error("The post you're trying to remove appears to be gone already?");
+  \resp\json_error("The post you're trying to remove appears to be gone already?");
   exit;
 }
 

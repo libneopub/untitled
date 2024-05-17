@@ -9,7 +9,7 @@ require_once __DIR__ . "/../core.php";
 
 if(isset($_GET['metadata'])) {
   json_data([
-    "issuer" => CANONICAL,
+    "issuer" => ISSUER,
     "authorization_endpoint" => AUTH_ENDPOINT,
     "token_endpoint" => TOKEN_ENDPOINT,
     "scopes_supported" => SUPPORTED_SCOPES,
@@ -92,24 +92,6 @@ function get_q_value($mime, $accept) {
   if($q === null) return 0;
   if($q === "") return 1;
   else return floatval($q);
-}
-
-// URL safe base64 encoding per https://tools.ietf.org/html/rfc7515#appendix-C
-function base64_url_encode($string) {
-  $string = base64_encode($string);
-  $string = rtrim($string, '=');
-  $string = strtr($string, '+/', '-_');
-  return $string;
-}
-
-function base64_url_decode($string) {
-  $string = strtr($string, '-_', '+/');
-  $padding = strlen($string) % 4;
-  if($padding !== 0) {
-    $string .= str_repeat('=', 4 - $padding);
-  }
-  $string = base64_decode($string);
-  return $string;
 }
 
 // Okay, we're ready to rock and roll!!
@@ -259,7 +241,8 @@ if($submitted_password !== null) {
 
   $parameters = [
     "code" => $code,
-    "me" => AUTHOR_MAIN_SITE
+    "me" => AUTHOR_MAIN_SITE,
+    "iss" => ISSUER,
   ];
 
   if($state !== null) $parameters['state'] = $state;

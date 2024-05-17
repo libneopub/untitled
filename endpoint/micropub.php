@@ -22,13 +22,13 @@ if(
   isset($_POST['bookmark-of'])
 ) {
   http_response_code(501);
-  json_error("Reposts, likes, or bookmarks are unsupported, use a reply instead.");
+  \resp\json_error("Reposts, likes, or bookmarks are unsupported, use a reply instead.");
   exit;
 }
 
 if(!empty($_FILES) && !isset($_FILES['photo'])) {
   http_response_code(501);
-  json_error("Only 'photo' uploads are supported.");
+  \resp\json_error("Only 'photo' uploads are supported.");
   exit;
 }
 
@@ -39,7 +39,7 @@ $allowed_actions = SUPPORTED_SCOPES;
 
 if(!in_array($action, $allowed_actions)) {
   http_response_code(501);
-  json_error("Action not supported.");
+  \resp\json_error("Action not supported.");
   exit;
 }
 

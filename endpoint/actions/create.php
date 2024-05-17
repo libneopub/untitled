@@ -3,7 +3,7 @@
 
 if(!isset($action)) {
   http_response_code(403);
-  json_error("Nice try, hackerboy.");
+  \resp\json_error("Nice try, hackerboy.");
   exit;
 }
 
@@ -27,7 +27,7 @@ if(isset($_FILES['photo'])) {
   // to overwrite /etc/passwd or something.
   if(!is_uploaded_file($tmp_file) || !getimagesize($tmp_file)) {
     http_response_code(400);
-    json_error("Bad photo upload. Try again.");
+    \resp\json_error("Bad photo upload. Try again.");
     exit;
   }
  
@@ -35,7 +35,7 @@ if(isset($_FILES['photo'])) {
 
   if(!$path) {
     http_response_code(500);
-    json_error("Something went wrong while saving your photo.");
+    \resp\json_error("Something went wrong while saving your photo.");
     exit;
   }
 
@@ -69,7 +69,7 @@ if(isset($_FILES['photo'])) {
 } else {
   if(!$content) {
     http_response_code(400);
-    json_error("Missing 'content' or 'summary' value in post payload.");
+    \resp\json_error("Missing 'content' or 'summary' value in post payload.");
     exit;
   }
 
