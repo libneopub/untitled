@@ -167,6 +167,13 @@ input[type="button"]:hover {
   opacity: 0.8;
 }
 
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  padding: 0.2em 0.4em;
+  font-size: 1em;
+}
+
 /* Dashboard */
 
 body {
@@ -254,12 +261,10 @@ input:user-invalid {
 }
 
 input[name="title"] {
-  padding: 0.2em 0.4em;
   font-size: 1.3em;
 }
 
 input[name="slug"] {
-  padding: 0.2em 0.4em;
   font-size: 1em;
   margin-bottom: 0.2em;
 }
