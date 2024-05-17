@@ -4,6 +4,8 @@ define('PUBB_VERSION', "0.1a");
 define('STORE', __DIR__ . "/data");
 define('CMS', '/cms');
 
+$defaults = [];
+
 if($json = @json_decode(file_get_contents(STORE . "/config.json"))) {
   foreach($json as $key => $value) {
     define(normalize_key($key), $value);
@@ -39,6 +41,7 @@ add_default('micropub-endpoint', CANONICAL . "/endpoint/micropub");
 add_default('media-endpoint', CANONICAL . "/endpoint/media");
 add_default('webmention-endpoint', CANONICAL . "/endpoint/webmention");
 add_default('auth-endpoint', CANONICAL . "/endpoint/auth");
+
 // TODO(robin): Implement this myself :)
 add_default('token-endpoint', "https://tokens.indieauth.com/token");
 
@@ -55,10 +58,35 @@ function normalize_key($key) {
 }
 
 function add_default($key, $value) {
+  global $defaults;
   $key = normalize_key($key);
+  $defaults[$key] = $value;
   
   if(!defined($key)) {
     define($key, $value);
+  }
+}
+
+function canonical_value($key) {
+  $key = normalize_key($key);
+  $empty = "";
+
+  if(defined($key)) {
+    $value = constant($key);
+    return is_default($key) ? $empty : $value;
+  } else {
+    return $empty;
+  }
+}
+
+function is_default($key) {
+  global $defaults;
+  $key = normalize_key($key);
+
+  if(defined($key) && isset($defaults[$key])) {
+    return $defaults[$key] == constant($key);
+  } else {
+    return false;
   }
 }
 

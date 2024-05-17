@@ -39,6 +39,7 @@
       type="text" 
       name="site.title" 
       placeholder="@dreamwastaken"
+      value="<?= canonical_value("site.title") ?>"
       required
     >
   </p>
@@ -49,6 +50,7 @@
       type="text" 
       name="site.description"
       placeholder="Verified (€15/year for the domain)"
+      value="<?= canonical_value("site.description") ?>"
       required
     >
   </p>
@@ -76,6 +78,7 @@
       type="text" 
       name="author.name"
       placeholder="Your name"
+      value="<?= canonical_value("author.name") ?>"
     >
   </p>
 
@@ -85,8 +88,9 @@
 
     <input 
       type="email" 
-      name="author.name"
+      name="author.email"
       placeholder="you@example.com"
+      value="<?= canonical_value("author.email") ?>"
     >
   </p>
 
@@ -98,10 +102,26 @@
       type="text" 
       name="author.main-site"
       placeholder="https://example.com"
+      value="<?= canonical_value("author.main_site") ?>"
     >
   </p>
 
   <h3>Notifications</h3>
+
+  <p>
+    <label for="notifications.admin">Receiving address</label>
+    <span>
+      The email address to which notifiations will be sent. 
+      (leave empty to use your public email address)
+    </span>
+
+    <input 
+      type="email" 
+      name="notifications.admin"
+      placeholder="you@example.com"
+      value="<?= canonical_value("notifications.admin") ?>"
+    >
+  </p>
 
   <p>
     <label for="notifications.sender">Sending address</label>
@@ -111,6 +131,7 @@
       type="email" 
       name="notifications.sender"
       placeholder="noreply@example.com"
+      value="<?= canonical_value("notifications.sender") ?>"
     >
   </p>
 
