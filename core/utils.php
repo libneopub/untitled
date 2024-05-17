@@ -11,7 +11,7 @@ function normalize_url($url) {
   $url = replace_prefix($url, "http://", "https://");
   $url = strtolower($url);
   
-  if(!str_ends_with($str, "/")) {
+  if(!str_ends_with($url, "/")) {
     return $url .= "/";
   } else {
     return $url;
