@@ -8,7 +8,7 @@ $_DEFAULTS = [];
 
 if($json = @json_decode(file_get_contents(CONFIG))) {
   foreach($json as $key => $value) {
-    define(normalize_key($key), $value);
+    define(normalize_key($key), normalize_value($value));
   }
 } else {
   die("Failed to read config file.");
@@ -46,9 +46,9 @@ function required($key) {
 function fallback($key, $value) {
   global $_DEFAULTS;
   $key = normalize_key($key);
-  $_DEFAULTS[$key] = $value;
   
   if(!defined($key)) {
+    $_DEFAULTS[$key] = $value;
     define($key, $value);
   }
 }
@@ -60,18 +60,13 @@ function value($key) {
 
 function canonical_value($key) {
   $key = normalize_key($key);
-  return is_default($key) ? "" : value($key);
+  return is_fallback($key) ? null : value($key);
 }
 
-function is_default($key) {
+function is_fallback($key) {
   global $_DEFAULTS;
   $key = normalize_key($key);
-
-  if(defined($key) and isset($_DEFAULTS[$key])) {
-    return $_DEFAULTS[$key] == constant($key);
-  } else {
-    return false;
-  }
+  return isset($_DEFAULTS[$key]);
 }
 
 function normalize_key($key) {
@@ -79,4 +74,12 @@ function normalize_key($key) {
   $key = str_replace(".", "_", $key);
 
   return strtoupper($key);
+}
+
+function normalize_value($value) {
+  return match($value) {
+    "on", "yes" => true,
+    "off", "no" => false,
+    default => $value
+  };
 }
