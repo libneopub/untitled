@@ -7,7 +7,7 @@ require_once __DIR__ . "/core.php";
 require_once __DIR__ . "/router.php";
 
 switch(true) {
-  case is_file(__DIR__ . $path) && is_builtin():
+  case is_file(__DIR__ . $path) and is_builtin():
     # Serve file as-is. Only applies to the development server,
     # in production this will be handled by Apache directly.
     return false;

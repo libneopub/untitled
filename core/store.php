@@ -13,7 +13,7 @@ function upload_text($content) {
 function upload_photo($tmp_file) {
   $path = path_from_hash($tmp_file, ext($tmp_file));
 
-  if(file_exists($path) || move_uploaded_file($tmp_file, $path)) {
+  if(file_exists($path) or move_uploaded_file($tmp_file, $path)) {
     return $path;
   } else {
     return false;
@@ -31,7 +31,7 @@ function put_post($year, $post) {
 
 function get_post($year, $id) {
   foreach(list_posts($year) as $post) {
-    if($post['id'] === $id) return $post;
+    if($post['id'] == $id) return $post;
   }
   return false;
 }
@@ -45,7 +45,7 @@ function list_posts_by_type($year, $type) {
   $posts = list_posts($year);
 
   return array_filter($posts, function($post) use($type) {
-    return $post['type'] === $type;
+    return $post['type'] == $type;
   });
 }
 

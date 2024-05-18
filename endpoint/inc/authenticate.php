@@ -7,7 +7,7 @@ foreach(getallheaders() as $name => $value) {
     $_HEADERS[$name] = $value;
 }
 
-if(!isset($_HEADERS['Authorization']) && !isset($_POST['access_token'])) {
+if(!isset($_HEADERS['Authorization']) and !isset($_POST['access_token'])) {
     http_response_code(401);
     echo "Missing 'Authorization' header.";
     echo "Missing 'access_token' value.";

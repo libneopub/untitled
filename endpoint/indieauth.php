@@ -18,7 +18,7 @@ if(isset($_GET['metadata'])) {
   exit;
 }
 
-if(!defined('ENCRYPTION_KEY') || !defined('HASHED_PASSWORD')) {
+if(!defined('ENCRYPTION_KEY') or !defined('HASHED_PASSPHRASE')) {
   http_response_code(500);
   echo "One of the required configuration keys for operating the IndieAuth endpoint is unset. Aborting.";
   exit; 
@@ -44,13 +44,6 @@ function verify_signed_code($key, $message, $code) {
   $body = $message . $expires . base64_url_decode($code_parts[2]);
   $signature = hash_hmac("sha256", $body, $key);
   return hash_equals($signature, $code_parts[1]);
-}
-
-function verify_password($password) {
-  $user_host = parse_url(AUTHOR_MAIN_SITE, PHP_URL_HOST);
-  $hash = md5($user_host . $password . ENCRYPTION_KEY);
-
-  return hash_equals(HASHED_PASSWORD, $hash);
 }
 
 function filter_input_regexp($type, $variable, $regexp, $flags = null) {
@@ -111,9 +104,9 @@ if($code !== null) {
 
   // Exit if there are errors in the client supplied data.
   if(!(is_string($code)
-      && is_string($redirect_uri)
-      && is_string($client_id)
-      && verify_signed_code(ENCRYPTION_KEY, AUTHOR_MAIN_SITE . $redirect_uri . $client_id, $code))
+      and is_string($redirect_uri)
+      and is_string($client_id)
+      and verify_signed_code(ENCRYPTION_KEY, AUTHOR_MAIN_SITE . $redirect_uri . $client_id, $code))
   ) {
     http_response_code(400);
     echo "Verification failed: given code was invalid.";
@@ -129,14 +122,14 @@ if($code !== null) {
 
   // Check what kind of response the client wants.
   $accept_header = '*/*';
-  if(isset($_SERVER['HTTP_ACCEPT']) && strlen($_SERVER['HTTP_ACCEPT']) > 0) {
+  if(isset($_SERVER['HTTP_ACCEPT']) and strlen($_SERVER['HTTP_ACCEPT']) > 0) {
       $accept_header = $_SERVER['HTTP_ACCEPT'];
   }
 
   $json = get_q_value("application/json", $accept_header);
   $form = get_q_value("application/x-www-form-urlencoded", $accept_header);
 
-  if($json === 0 && $form === 0) {    
+  if($json === 0 and $form === 0) {    
     http_response_code(406);    
     echo "The client accepts neither JSON nor form-encoded responses.";
     exit;
@@ -205,13 +198,13 @@ $submitted_password = filter_input(INPUT_POST, "password", FILTER_UNSAFE_RAW);
 if($submitted_password !== null) {
   $csrf_token = filter_input(INPUT_POST, "_csrf", FILTER_UNSAFE_RAW);
 
-  if($csrf_token === null || !verify_signed_code(ENCRYPTION_KEY, $client_id . $redirect_uri . $state, $csrf_token)) {
+  if($csrf_token === null or !verify_signed_code(ENCRYPTION_KEY, $client_id . $redirect_uri . $state, $csrf_token)) {
     http_response_code(400);
     echo "The CSRF token was invalid. Usually this means you took too long to log in. Please try again.";
     exit;
   }
 
-  if(!verify_password($submitted_password)) {
+  if(!\auth\verify_password($submitted_password)) {
     syslog(LOG_CRIT, "IndieAuth: login failure from " . $_SERVER['REMOTE_ADDR'] . " to $me");
 
     http_response_code(403);
@@ -223,7 +216,7 @@ if($submitted_password !== null) {
 
   if($scope !== null) {
     // Exit if the scopes ended up with illegal characters or were not supplied as array.
-    if($scope === false || in_array(false, $scope, true)) {
+    if($scope === false or in_array(false, $scope, true)) {
       http_response_code(400);
       echo "The scopes provided contained illegal characters.";
       exit;
@@ -283,7 +276,7 @@ $csrf_token =
       
       <form action="" method="post">
         <?php if(strlen($scope) > 0) { ?>
-          <?php if($client_id === CLIENT_ID) { ?>
+          <?php if($client_id == CLIENT_ID) { ?>
             <?php foreach(explode(" ", $scope) as $n => $name) { ?>
               <input 
                 id="scope_<?= $n ?>" 

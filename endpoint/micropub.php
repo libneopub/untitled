@@ -5,7 +5,7 @@ require_once __DIR__ . "/../config.php";
 require_once __DIR__ . "/../core.php";
 
 // Configuration requests don't need authentication
-if($_GET["q"] === "config") {
+if($_GET["q"] == "config") {
   http_response_code(200);
   echo json_encode(["media-endpoint" => $MEDIA_ENDPOINT]);
   exit;
@@ -17,8 +17,8 @@ include __DIR__ . "/inc/authenticate.php";
 // we (intentionally) don't support.
 
 if(
-  isset($_POST['repost-of']) || 
-  isset($_POST['like-of']) || 
+  isset($_POST['repost-of']) or 
+  isset($_POST['like-of']) or 
   isset($_POST['bookmark-of'])
 ) {
   http_response_code(501);
@@ -26,7 +26,7 @@ if(
   exit;
 }
 
-if(!empty($_FILES) && !isset($_FILES['photo'])) {
+if(!empty($_FILES) and !isset($_FILES['photo'])) {
   http_response_code(501);
   \resp\json_error("Only 'photo' uploads are supported.");
   exit;

@@ -16,12 +16,12 @@ $page_types = array(
 );
 
 switch(true) {
-  case !is_https() && FORCE_HTTPS:
+  case !is_https() and FORCE_HTTPS:
     http_response_code(301);
     header("Location: https://" . HOST . $_SERVER['REQUEST_URI']);
     exit;
   
-  case $path === "/":
+  case $path == "/":
     http_response_code(302);
     header("Location: " . CANONICAL . "/" . date("Y"));
     exit;
@@ -80,13 +80,13 @@ if($not_found) {
       <?php
 
         switch(true) {
-          case isset($post) && $post !== false:
+          case isset($post) and $post !== false:
             \renderer\render_post($post);
             \renderer\render_comment_section($post);
             
             break;
 
-          case isset($posts) && count($posts) > 0:
+          case isset($posts) and count($posts) > 0:
             foreach($posts as $post) {
               \renderer\render_post($post);
             }

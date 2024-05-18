@@ -1,11 +1,14 @@
 <?php
 // Core Pubb APIs live here.
 
+define('PUBB_VERSION', "0.1a");
+
 require_once __DIR__ . "/init.php";
 require_once __DIR__ . "/core/core.php";
 require_once __DIR__ . "/core/store.php";
+require_once __DIR__ . "/core/constants.php";
 require_once __DIR__ . "/core/utils.php";
-require_once __DIR__ . "/core/resp.php";
+require_once __DIR__ . "/core/auth.php";
 require_once __DIR__ . "/core/http.php";
 require_once __DIR__ . "/core/dates.php";
 require_once __DIR__ . "/core/urls.php";
@@ -15,6 +18,7 @@ require_once __DIR__ . "/core/webmentions.php";
 require_once __DIR__ . "/core/pingbacks.php";
 require_once __DIR__ . "/core/renderer.php";
 require_once __DIR__ . "/core/headers.php";
+require_once __DIR__ . "/core/resp.php";
 require_once __DIR__ . "/core/langs.php";
 
 // Vendorerd

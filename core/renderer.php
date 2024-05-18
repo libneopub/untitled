@@ -15,6 +15,10 @@ function render_error($message) {
   render_message("error", $message);
 }
 
+function render_success($message) {
+  render_message("success", $message);
+}
+
 function render_message($kind, $message) {
   ?>
     <p class="<?= $kind ?>"><?= $message ?></p>
@@ -38,7 +42,7 @@ function render_post($post) {
         </a>
       </time>
 
-      <?php if(defined('AUTHOR_NAME') && defined('AUTHOR_PICTURE')) { ?>
+      <?php if(defined('AUTHOR_NAME') and defined('AUTHOR_PICTURE')) { ?>
         <div class="p-author h-card">
           <a class="u-url" href="<?= CANONICAL ?>">
             <img

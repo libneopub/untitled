@@ -21,8 +21,8 @@ function send_pingback($source_url, $target_url) {
   $body = strtolower(preg_replace('/\s+/', "", $response['body']));
 
   // Check if request was successful
-  if($response['status'] !== 200 || empty($body)) return false;
-  if(strpos($body, "<fault>") || !strpos($body, "<string>")) return false;
+  if($response['status'] !== 200 or empty($body)) return false;
+  if(strpos($body, "<fault>") or !strpos($body, "<string>")) return false;
 
   return $response['body'];
 }
@@ -37,7 +37,7 @@ function discover_endpoint($target_url) {
   $rel_href = '/<(?:link|a)[ ]+href="([^"]*)"[ ]+rel="pingback"[ ]*\/?>/i';
   $href_rel = '/<(?:link|a)[ ]+rel="pingback"[ ]+href="([^"]*)"[ ]*\/?>/i';
 
-  if(preg_match($rel_href, $body, $match) || preg_match($href_rel, $body, $match)) {
+  if(preg_match($rel_href, $body, $match) or preg_match($href_rel, $body, $match)) {
     return $match[1];
   }
 

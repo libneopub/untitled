@@ -19,9 +19,9 @@ function route($pattern) {
 }
 
 function is_builtin() {
-  return php_sapi_name() === "cli-server";
+  return php_sapi_name() == "cli-server";
 }
 
 function is_https() {
-  return !empty($_SERVER['https']) && $_SERVER['HTTPS'] !== "off";
+  return !empty($_SERVER['https']) and $_SERVER['HTTPS'] !== "off";
 }

@@ -1,34 +1,4 @@
-<style>
-  input[type="text"], 
-  input[type="email"],
-  select {
-    width: 100%;
-    margin-top: 0.4em;
-    margin-bottom: 0.2em;
-  }
-
-  h3 {
-    border-bottom: 1px solid #ccc;
-    margin-top: 2em;
-  }
-
-  label:not(:has(input)) {
-    font-weight: bold;
-  }
-
-  p label + span {
-    display: block;
-    font-size: 0.9em;
-    color: #777;
-  }
-
-  input[type="submit"] {
-    float: right;
-    margin-bottom: 3em;
-  }
-</style>
-
-<form action="<?= CANONICAL.CMS . "/save-settings" ?>" method="post">
+<form action="" method="post">
   <h3>Site details</h3>
 
   <p>
@@ -60,7 +30,7 @@
       <?php foreach(LANGUAGE_CODES as $code => $language) { ?>
         <option 
           value="<?= $code ?>" 
-          <?php if($code === SITE_LANG) echo "selected" ?>
+          <?php if($code == SITE_LANG) echo "selected" ?>
         >
           <?= $language ?>
         </option>
@@ -109,7 +79,7 @@
   <p>
     <label for="notifications.admin">Receiving address</label>
     <span>
-      The email address to which notifiations will be sent. 
+      The email address to which notifiations will be sent.
       (leave empty to use your public email address)
     </span>
 
@@ -144,5 +114,24 @@
     </label>
   </p>
 
-  <input type="submit" value="Save">
+  <h3>Security</h3>
+
+  <p>
+    <label for="passphrase">Passphrase</label>
+    <span>If you want to change the passphrase, please enter a new one and then confirm it by typing it again. (leave empty to keep current passphrase)</span>
+
+    <input 
+      type="password" 
+      name="passphrase"
+      placeholder="Enter a passphrase..."
+    >
+
+    <input 
+      type="password" 
+      name="confirm"
+      placeholder="Confirm passphrase..."
+    >
+  </p>
+
+  <input type="submit" name="save" value="Save">
 </form>

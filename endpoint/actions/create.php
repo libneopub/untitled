@@ -25,7 +25,7 @@ if(isset($_FILES['photo'])) {
 
   // This checks if someone isn't maliciously trying
   // to overwrite /etc/passwd or something.
-  if(!is_uploaded_file($tmp_file) || !getimagesize($tmp_file)) {
+  if(!is_uploaded_file($tmp_file) or !getimagesize($tmp_file)) {
     http_response_code(400);
     \resp\json_error("Bad photo upload. Try again.");
     exit;

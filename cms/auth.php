@@ -7,7 +7,7 @@ function is_authenticated() {
     // The development server can't handle concurrent requests,
     // so the CURL request below will fail. Therefore, I decided
     // to turn authenticated of when running locally.
-    return !!@$_SESSION['authenticated'] || is_builtin();
+    return !!@$_SESSION['authenticated'] or is_builtin();
 }
 
 // Proceed if the user is logged in.
@@ -71,7 +71,7 @@ else {
         "code_verifier" => $_SESSION['code_verifier'],
     ]);
 
-    if($response['state'] === "failed") {
+    if($response['state'] == "failed") {
         http_response_code(500);
         \resp\json_error("Failed to verify authorization code. Got: " . $response['body'] . ".");
         exit;

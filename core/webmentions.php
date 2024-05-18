@@ -20,7 +20,7 @@ function send_webmention($source_url, $target_url) {
   
   \http\post($endpoint, $payload, $headers);
   
-  if($response['status'] < 200 || $response['status'] > 299) {
+  if($response['status'] < 200 or $response['status'] > 299) {
     return false;
   }
 
@@ -43,7 +43,7 @@ function discover_endpoint($target_url) {
   $rel_href = '/<(?:link|a)[ ]+href="([^"]*)"[ ]+rel="[^" ]* ?webmention ?[^" ]*"[ ]*\/?>/i';
   $href_rel = '/<(?:link|a)[ ]+rel="[^" ]* ?webmention ?[^" ]*"[ ]+href="([^"]*)"[ ]*\/?>/i';
 
-  if(preg_match($rel_href, $body, $match) || preg_match($href_rel, $body, $match)) {
+  if(preg_match($rel_href, $body, $match) or preg_match($href_rel, $body, $match)) {
     return $match[1];
   }
 

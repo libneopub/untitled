@@ -1,11 +1,12 @@
 <?php
+// Dynamic configuration based on the JSON store.
 
-define('PUBB_VERSION', "0.1a");
 define('STORE', __DIR__ . "/data");
+define('CONFIG', STORE . "/config.json");
 
-$defaults = [];
+$_DEFAULTS = [];
 
-if($json = @json_decode(file_get_contents(STORE . "/config.json"))) {
+if($json = @json_decode(file_get_contents(CONFIG))) {
   foreach($json as $key => $value) {
     define(normalize_key($key), $value);
   }
@@ -17,60 +18,35 @@ required('host');
 required('site.title');
 required('site.description');
 
-// Optional
+fallback('force-https', false);
+fallback('canonical', (FORCE_HTTPS ? "https" : "http") . "://" . HOST);
 
-// author.name
-// author.email
-// author.picture
+fallback('site.lang', "en");
+fallback('author.main-site', CANONICAL);
+fallback('notifications.admin', value("author.email"));
+fallback('notifications.sender', "noreply@" . HOST);
+fallback('notifications.webmention', true);
 
-// Required, with defaults
-
-add_default('force-https', false);
-add_default('canonical', (FORCE_HTTPS ? "https" : "http") . "://" . HOST);
-
-add_default('site.lang', "en");
-add_default('author.main-site', CANONICAL);
-add_default('notifications.admin', value("author.email"));
-add_default('notifications.sender', "noreply@" . HOST);
-add_default('notifications.webmention', true);
-
-add_default('micropub-endpoint', CANONICAL . "/endpoint/micropub");
-add_default('media-endpoint', CANONICAL . "/endpoint/media");
-add_default('webmention-endpoint', CANONICAL . "/endpoint/webmention");
-add_default('auth-endpoint', CANONICAL . "/endpoint/indieauth");
-add_default('token-endpoint', "https://tokens.indieauth.com/token");
-
-// I can't be bothered to actually implement pingback. Sowwy!
-add_default('pingback-endpoint', 
+fallback('micropub-endpoint', CANONICAL . "/endpoint/micropub");
+fallback('media-endpoint', CANONICAL . "/endpoint/media");
+fallback('webmention-endpoint', CANONICAL . "/endpoint/webmention");
+fallback('auth-endpoint', CANONICAL . "/endpoint/indieauth");
+fallback('token-endpoint', "https://tokens.indieauth.com/token");
+fallback('pingback-endpoint', 
   "https://webmention.io/webmention?forward=" . WEBMENTION_ENDPOINT);
-
-// Constants
-
-define('CMS', '/cms');
-define('ISSUER', CANONICAL . "/");
-define('CLIENT_ID', ISSUER);
-define('REDIRECT_URI', CANONICAL.CMS . "/auth");
-
-define('SUPPORTED_SCOPES', [
-  "create", 
-  "update", 
-  "delete", 
-  "media"
-]);
 
 // Helpers
 
-function normalize_key($key) {
-  $key = str_replace("-", "_", $key);
-  $key = str_replace(".", "_", $key);
-
-  return strtoupper($key);
+function required($key) {
+  if(!defined(normalize_key($key))) {
+    die("Missing required key '$key' in config.");
+  }
 }
 
-function add_default($key, $value) {
-  global $defaults;
+function fallback($key, $value) {
+  global $_DEFAULTS;
   $key = normalize_key($key);
-  $defaults[$key] = $value;
+  $_DEFAULTS[$key] = $value;
   
   if(!defined($key)) {
     define($key, $value);
@@ -84,29 +60,23 @@ function value($key) {
 
 function canonical_value($key) {
   $key = normalize_key($key);
-  $empty = "";
-
-  if(defined($key)) {
-    $value = constant($key);
-    return is_default($key) ? $empty : $value;
-  } else {
-    return $empty;
-  }
+  return is_default($key) ? "" : value($key);
 }
 
 function is_default($key) {
-  global $defaults;
+  global $_DEFAULTS;
   $key = normalize_key($key);
 
-  if(defined($key) && isset($defaults[$key])) {
-    return $defaults[$key] == constant($key);
+  if(defined($key) and isset($_DEFAULTS[$key])) {
+    return $_DEFAULTS[$key] == constant($key);
   } else {
     return false;
   }
 }
 
-function required($key) {
-  if(!defined(normalize_key($key))) {
-    die("Missing required key '$key' in config.");
-  }
+function normalize_key($key) {
+  $key = str_replace("-", "_", $key);
+  $key = str_replace(".", "_", $key);
+
+  return strtoupper($key);
 }

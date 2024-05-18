@@ -13,7 +13,7 @@ foreach(getallheaders() as $name => $value) {
 
 function equal($name, $value) {
   global $_HEADERS;
-  return !empty($_HEADERS[$name]) && $_HEADERS[$name] == $value;
+  return !empty($_HEADERS[$name]) and $_HEADERS[$name] == $value;
 }
 
 $last_modified = date("r", strtotime($last_updated));
