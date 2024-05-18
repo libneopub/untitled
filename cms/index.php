@@ -31,6 +31,7 @@ include __DIR__ . "/mvc.php";
   <body>
     <?php include __DIR__ . "/partials/header.php" ?>
     <main>
+      <?php render_flash(); ?>
       <?php
         switch(true) {
           case file_exists($controller):
@@ -38,7 +39,7 @@ include __DIR__ . "/mvc.php";
             break;
 
           case file_exists($view):
-            include $views;
+            include $view;
             break;
 
           default:
