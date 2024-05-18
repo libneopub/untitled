@@ -22,6 +22,9 @@ function request($uri, $headers = [], $options = []) {
   $headers = [];
   curl_setopt($ch, CURLOPT_HEADERFUNCTION,
     function ($ch, $header) use (&$headers) {
+      if(!str_contains($header, ":"))
+        return strlen($header);
+
       [$name, $value] = explode(":", $header, 2);
       $name = strtolower(trim($name));
       $headers[$name][] = trim($value);
@@ -31,13 +34,18 @@ function request($uri, $headers = [], $options = []) {
   );
 
   $response = curl_exec($ch);
+
+  $state = $response ? "success" : "failed";
   $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+  $body = $response ? $response : curl_error($ch);
+
   curl_close($ch);
 
   return [
+    "state" => $state,
     "status" => $status,
     "headers" => $headers,
-    "body" => $response
+    "body" => $body 
   ];
 }
 

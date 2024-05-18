@@ -3,8 +3,15 @@
 
 session_start() or die("Failed to start session");
 
+function is_authenticated() {
+    // The development server can't handle concurrent requests,
+    // so the CURL request below will fail. Therefore, I decided
+    // to turn authenticated of when running locally.
+    return !!@$_SESSION['authenticated'] || is_builtin();
+}
+
 // Proceed if the user is logged in.
-if(isset($_SESSION['access_token'])) {
+if(is_authenticated()) {
     // NOTE(robin): I reserved this block to do certain checks later.
     // For now, we'll leave it empty.
 }
@@ -56,21 +63,28 @@ else {
         exit;
     }
 
-    $response = \http\post(TOKEN_ENDPOINT, [
+    $response = \http\post(AUTH_ENDPOINT, [
         "grant_type" => "authorization_code",
-        "code" => $_POST['code'],
+        "code" => $_GET['code'],
         "client_id" => CLIENT_ID,
         "redirect_uri" => REDIRECT_URI,
         "code_verifier" => $_SESSION['code_verifier'],
     ]);
 
-    if(!isset($response['access_token'])) {
+    if($response['state'] === "failed") {
         http_response_code(500);
-        \resp\json_error("The response from the token endpoint didn't contain an access token. Something went horribly wrong.");
-        exit;        
+        \resp\json_error("Failed to verify authorization code. Got: " . $response['body'] . ".");
+        exit;
+    }
+
+    $body = json_decode($response['body']);
+
+    if(@$body['me'] !== AUTHOR_MAIN_SITE) {
+        http_response_code(401);
+        \resp\json_error("You're not 'me'. So either you're a crazy hackerboy or I'm a dumd idiot. Or both.");
+        exit;
     }
 
     // Authenticate the user.
-    $_SESSION['access_token'] = 
-        $response['access_token'];
+    $_SESSION['authenticated'] = true;
 }

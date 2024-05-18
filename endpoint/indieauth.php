@@ -250,9 +250,13 @@ if($submitted_password !== null) {
   $final_uri .= http_build_query($parameters);
   header("Location: $final_uri", response_code: 302);
 
-  syslog(LOG_INFO, "IndieAuth: login from " . _SERVER['REMOTE_ADDR'] . " for $me");
+  syslog(LOG_INFO, "IndieAuth: login from " . $_SERVER['REMOTE_ADDR'] . " for $me");
   exit;
 }
+
+// If the user hasn't submitted the form yet, that means we should
+// probably show it. We hide the scope options when we're logging in
+// to our own CMS.
 
 $csrf_token = 
   create_signed_code(ENCRYPTION_KEY, $client_id . $redirect_uri . $state, 2 * 60);
@@ -280,7 +284,14 @@ $csrf_token =
       <form action="" method="post">
         <?php if(strlen($scope) > 0) { ?>
           <?php if($client_id === CLIENT_ID) { ?>
-            <input type="hidden" name="scopes" value="<?= $scope ?>" />
+            <?php foreach(explode(" ", $scope) as $n => $name) { ?>
+              <input 
+                id="scope_<?= $n ?>" 
+                type="hidden" 
+                name="scopes[]" 
+                value="<?= htmlspecialchars($name) ?>" 
+              >
+            <?php } ?>
           <?php } else { ?>
             <p>It is requesting the following permissions. Uncheck any you do not wish to grant:</p>
 
