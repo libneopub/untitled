@@ -63,8 +63,8 @@ if(stristr($source, $_POST['target'])) {
 
 http_response_code(202);
 
-[$year, $id] = $params;
-\store\put_mention($year, $id, $_POST['source']);
+[$volume, $id] = $params;
+\store\put_mention($volume, $id, $_POST['source']);
 
 if(NOTIFICATIONS_WEBMENTION) {
   \notifications\new_webmention($_POST['target'], $_POST['source']);

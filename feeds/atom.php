@@ -29,7 +29,8 @@ echo '<?xml version="1.0" encoding="utf-8" standalone="yes"?>';
   </generator>
 
   <?php
-    $posts = \store\list_posts(date("Y"));
+    $volume = \store\current_volume();
+    $posts = \store\list_posts($volume);
 
     foreach($posts as $post) {
       ?>

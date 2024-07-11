@@ -8,8 +8,8 @@ function photo_url($path) {
 }
 
 function post_url($post) {
-  $year_published = \dates\year($post['published']);
-  return CANONICAL . "/" . $year_published . "/" . $post['id'];
+  $volume = $post['volume'];
+  return CANONICAL . "/" . $volume . "/" . $post['id'];
 }
 
 function parse($url) {

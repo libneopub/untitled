@@ -9,7 +9,8 @@ include __DIR__ . "/caching.php";
 
 header("Content-Type: application/feed+json; charset=UTF-8");
 
-$posts = \store\list_posts(date("Y"));
+$volume = \store\current_volume();
+$posts = \store\list_posts($volume);
 $entries = [];
 
 foreach($posts as $post) {

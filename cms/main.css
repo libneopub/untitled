@@ -212,8 +212,10 @@ input[type="password"] {
 
 /* Dashboard */
 
-body {
+body, html {
   margin: 0;
+  height: 100%;
+  overflow-x: hidden;
 }
 
 body > header {

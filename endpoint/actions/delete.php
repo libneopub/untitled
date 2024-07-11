@@ -22,7 +22,7 @@ if(!$params) {
   exit;
 }
 
-[$year, $id] = $params;
-\store\delete_post($year, $id);
+[$volume, $id] = $params;
+\store\delete_post($volume, $id);
 
 header($_SERVER["SERVER_PROTOCOL"] . " 200 OK");

@@ -3,8 +3,8 @@
 </header>
 
 <?php 
-  $year = $_GET['year'] ?? date("Y");
-  $mentions = \store\list_all_mentions($year);
+  $volume = $_GET['volume'] ?? \store\current_volume();
+  $mentions = \store\list_all_mentions($volume);
 ?>
 
 <ul class="pages-list">
