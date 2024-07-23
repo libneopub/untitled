@@ -23,7 +23,7 @@ switch(true) {
   
   case $path == "/":
     http_response_code(302);
-    header("Location: " . CANONICAL . "/" . \store\current_volume());
+    header("Location: " . CANONICAL . "/" . date("Y"));
     exit;
 
   case route('@' . CMS . '.*$@'):
@@ -32,30 +32,30 @@ switch(true) {
     exit;
 
   case route('@/(\d{4})$@'):
-    $volume = $params[1];
-    $posts = \store\list_posts($volume);
+    $year = $params[1];
+    $posts = \store\list_posts($year);
     
     break;
 
   case route('@/(\d{4})/(toots|replies|photos|code)$@'):
-    $volume = $params[1];
+    $year = $params[1];
     $type = $page_types[$params[2]];
     
-    $posts = \store\list_posts_by_type($volume, $type);
+    $posts = \store\list_posts_by_type($year, $type);
 
     break;
 
   case route('@/(\d{4})/(\w+)$@'):
-    $volume = $params[1];
+    $year = $params[1];
     $id = $params[2];
 
-    $post = \store\get_post($volume, $id);
+    $post = \store\get_post($year, $id);
     if(!$post) $not_found = true;
 
     break;
 
   default:
-    $volume = \store\current_volume();
+    $year = date("Y");
     $not_found = true;
     break;
 }

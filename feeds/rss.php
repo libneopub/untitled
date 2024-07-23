@@ -32,8 +32,7 @@ echo '<?xml version="1.0" encoding="utf-8" standalone="yes"?>';
     } ?>
 
     <?php
-      $volume = \store\current_volume();
-      $posts = \store\list_posts($volume);
+      $posts = \store\list_posts(date("Y"));
 
       foreach($posts as $post) {
         ?>

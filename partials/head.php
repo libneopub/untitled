@@ -8,15 +8,13 @@
 <link rel="alternate" type="application/feed+json" title="<?= SITE_TITLE ?> (JSON)" href="<?= CANONICAL . "/feed.json" ?>">
 
 <?php
-// Try to load stylesheet by volume if it exists.
+// Try to load stylesheet by year if it exists.
 // Otherwise, fall back to the generic stylesheet.
-// Uhmm, "era", no clue why they keep calling me 
-// a Swiftie...?
 
-$era = "/styles/$volume.css";
+$yearly = "/styles/$year.css";
 $general = "/default.css";
 
-$stylesheet = file_exists(STORE . $era) ? $era : $general;
+$stylesheet = file_exists(STORE . $yearly) ? $yearly : $general;
 ?>
 
 <link rel="stylesheet" type="text/css" href="<?= $stylesheet ?>">

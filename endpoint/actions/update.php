@@ -22,8 +22,8 @@ if(!$params) {
   exit;
 }
 
-[$volume, $id] = $params;
-\store\get_post($volume, $id);
+[$year, $id] = $params;
+\store\get_post($year, $id);
 
 // TODO(robin): implement post updating.
 

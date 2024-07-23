@@ -2,29 +2,25 @@
 // Core Pubb API.
 // Mostly wrappers around the other namespaces in neopub core.
 
-// TODO(robin):
-// add 'volume' field to posts
-// add 'slug' field to posts
-// some sort of "current volume"?
-
 namespace core;
 
 function get_post($url) {
   if($params = \urls\parse($url)) {
-    [$volume, $id] = $params;
-    return \store\get_post($volume, $id);
+    [$year, $id] = $params;
+    return \store\get_post($year, $id);
   } else {
     return false;
   }
 }
 
 function publish_post($post) {
-  $volume = \store\current_volume();
-  return \store\put_post($volume, $post);
+  $year = \dates\year($post['published']);
+  return \store\put_post($year, $post);
 }
 
 function list_mentions($post) {
-  return \store\list_mentions($post['volume'], $post['id']);
+  $year = \dates\year($post['published']);
+  return \store\list_mentions($year, $post['id']);
 }
 
 function send_webmentions($post) {

@@ -5,20 +5,19 @@
 </header>
 
 <?php 
-  $volume = $_GET['volume'] ?? \store\current_volume();
-  $posts = \store\list_posts_by_type($volume, "code");
+  $year = $_GET['year'] ?? date("Y");
+  $posts = \store\list_posts_by_type($year, "code");
 ?>
 
 <ul class="pages-list">
-  <?php foreach($posts as $post) {     
-    $query = http_build_query(["id" => $post['id'], "volume" => $volume]); 
-    ?>
-      <li>
-        <a href="<?= CANONICAL.CMS . "/edit" ?>?<?= $query ?>">
-          // TODO(robin): determine code snippet store format.
-        </a>
-      </li>
-    <?php
+  <?php foreach($posts as $post) {      
+      ?>
+        <li>
+          <a href="<?= CANONICAL.CMS . "/edit" ?>?id=<?= $post['id'] ?>&year=<?= $year ?>">
+            // TODO(robin): determine code snippet store format.
+          </a>
+        </li>
+      <?php            
   } ?>
 </ul>
 

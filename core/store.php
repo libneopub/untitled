@@ -24,32 +24,25 @@ function upload_contents($path) {
   return file_get_contents(STORE . "/uploads/$path");
 }
 
-function put_post($volume, $post) {
-  $feed = feed_for_volume($volume);
+function put_post($year, $post) {
+  $feed = feed_for_year($year);
   write_json($feed, $post);
 }
 
-function get_post($volume, $id) {
-  foreach(list_posts($volume) as $post) {
+function get_post($year, $id) {
+  foreach(list_posts($year) as $post) {
     if($post['id'] == $id) return $post;
   }
   return false;
 }
 
-function get_post_by_slug($volume, $slug) {
-  foreach(list_posts($volume) as $post) {
-    if($post['slug'] == $slug) return $post;
-  }
-  return false;
-}
-
-function list_posts($volume) {
-  $feed = feed_for_volume($volume);
+function list_posts($year) {
+  $feed = feed_for_year($year);
   return read_json($feed);
 }
 
-function list_posts_by_type($volume, $type) {
-  $posts = list_posts($volume);
+function list_posts_by_type($year, $type) {
+  $posts = list_posts($year);
 
   return array_filter($posts, function($post) use($type) {
     return $post['type'] == $type;
@@ -57,32 +50,29 @@ function list_posts_by_type($volume, $type) {
 }
 
 function last_updated() {
-  $posts = list_posts(last_volume());
+  $current_year = date("Y");
+  $posts = list_posts($current_year);
   $latest_post = $posts[0];
 
   return $latest_post['published'];
 }
 
-// TODO(robin)
-function last_volume() { return date("Y"); }
-function current_volume() { return date("Y"); }
-
-function put_mention($volume, $id, $source) {
-  $feed = feed_for_post($volume, $id);
+function put_mention($year, $id, $source) {
+  $feed = feed_for_post($year, $id);
   write_json($feed, $source);
 }
 
-function list_mentions($volume, $id) {
-  $feed = feed_for_post($volume, $id);
+function list_mentions($year, $id) {
+  $feed = feed_for_post($year, $id);
   return read_json($feed);
 }
 
-function list_all_mentions($volume) {
-  $posts = list_posts($volume);
+function list_all_mentions($year) {
+  $posts = list_posts($year);
   $mentions = [];
 
   foreach($posts as $post) {
-    $for_post = list_mentions($volume, $post['id']);
+    $for_post = list_mentions($year, $post['id']);
     $mentions[] = [$post, $for_post];
   }
 
@@ -101,12 +91,12 @@ function list_views($year, $month) {
 
 // Helpers
 
-function feed_for_volume($volume) {
-  return STORE . "/posts/$volume.json";
+function feed_for_year($year) {
+  return STORE . "/posts/$year.json";
 }
 
-function feed_for_post($volume, $id) {
-  return STORE . "/mentions/$volume/$id.json";
+function feed_for_post($year, $id) {
+  return STORE . "/mentions/$year/$id.json";
 }
 
 function feed_for_month($year, $month) {
